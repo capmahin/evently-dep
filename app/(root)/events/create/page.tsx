@@ -1,9 +1,9 @@
 import React from 'react'
 
-const page = () => {
+const CreateEvent = () => {
   return (
-    <div>page</div>
+    <div>CreateEvent</div>
   )
 }
 
-export default page
+export default CreateEvent
