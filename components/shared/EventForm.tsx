@@ -1,5 +1,8 @@
 "use client"
 
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+
 type EventFormProps ={
     userId:string
     type: "Create" | "Update"
@@ -7,7 +10,7 @@ type EventFormProps ={
 
 const EventForm = ({userId, type}: EventFormProps) => {
   return (
-    <div>EventForm</div>
+    <div>EventForm {type}</div>
   )
 }
 
