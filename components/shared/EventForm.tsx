@@ -2,7 +2,7 @@
 
 type EventFormProps ={
     userId:string
-    type: "Create" | "Edit"
+    type: "Create" | "Update"
 }
 
 const EventForm = ({userId, type}: EventFormProps) => {
