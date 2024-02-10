@@ -51,10 +51,10 @@ const EventForm = ({userId, type}: EventFormProps) => {
         control={form.control}
         name="title"
         render={({ field }) => (
-          <FormItem>
-            <FormLabel>Username</FormLabel>
+          <FormItem className="w-full">
+            
             <FormControl>
-              <Input placeholder="shadcn" {...field} />
+              <Input placeholder="Event title" {...field} />
             </FormControl>
             <FormDescription>
               This is your public display name.
