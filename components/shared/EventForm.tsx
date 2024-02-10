@@ -54,7 +54,9 @@ const EventForm = ({userId, type}: EventFormProps) => {
           <FormItem className="w-full">
             
             <FormControl>
-              <Input placeholder="Event title" {...field} />
+              <Input placeholder="Event title" {...field} 
+              className="input-field"
+              />
             </FormControl>
             <FormDescription>
               This is your public display name.
