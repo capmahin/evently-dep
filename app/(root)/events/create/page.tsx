@@ -1,8 +1,8 @@
-import React from 'react'
-
 const CreateEvent = () => {
   return (
-    <div>CreateEvent</div>
+    <section>
+      <h3>Create Event</h3>
+    </section>
   )
 }
 
