@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import * as z from "zod"
+
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -14,12 +14,11 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { eventFormSchema } from "@/lib/validator"
+import * as z from 'zod';
+import { eventDefaultValues } from "@/constants"
 
-const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-})
+
 
 
 type EventFormProps ={
@@ -27,26 +26,30 @@ type EventFormProps ={
     type: "Create" | "Update"
 }
 
+
 const EventForm = ({userId, type}: EventFormProps) => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      username: "",
-    },
+
+  const initialValues = eventDefaultValues;
+
+  const form = useForm<z.infer<typeof eventFormSchema>>({
+    resolver: zodResolver(eventFormSchema),
+    defaultValues: initialValues
   })
  
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: z.infer<typeof eventFormSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values)
   }
   return (
     <Form {...form}>
-    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+    <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-5">
+
+      <div className="flex flex-col gap-5 md:flex-row">
       <FormField
         control={form.control}
-        name="username"
+        name="title"
         render={({ field }) => (
           <FormItem>
             <FormLabel>Username</FormLabel>
@@ -60,6 +63,9 @@ const EventForm = ({userId, type}: EventFormProps) => {
           </FormItem>
         )}
       />
+      </div>
+
+      
       <Button type="submit">Submit</Button>
     </form>
   </Form>
