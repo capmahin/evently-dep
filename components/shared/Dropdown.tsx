@@ -1,6 +1,11 @@
 import React from 'react'
 
-const Dropdown = () => {
+type DropdownProps={
+    value: string
+    onChangeHandler: (value:string)=> void
+}
+
+const Dropdown = ({value, onChangeHandler}: DropdownProps) => {
   return (
     <div>Dropdown</div>
   )
