@@ -14,7 +14,7 @@ type DropdownProps={
 }
 
 const Dropdown = ({value, onChangeHandler}: DropdownProps) => {
-     const [first, setfirst] = useState<ICategory[]>([])
+     const [categories, setCategories] = useState<ICategory[]>([])
  
 
   return (
@@ -23,9 +23,11 @@ const Dropdown = ({value, onChangeHandler}: DropdownProps) => {
     <SelectValue placeholder="Category" />
   </SelectTrigger>
   <SelectContent>
-    <SelectItem value="light">Light</SelectItem>
-    <SelectItem value="dark">Dark</SelectItem>
-    <SelectItem value="system">System</SelectItem>
+   {categories.length > 0 && categories.map((category)=>(
+    <SelectItem key={category._id} value={category._id} className="select-item p-regular-14">
+        {category.name}
+    </SelectItem>
+   ))}
   </SelectContent>
 </Select>
   )
