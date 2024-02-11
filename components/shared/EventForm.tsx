@@ -58,9 +58,7 @@ const EventForm = ({userId, type}: EventFormProps) => {
               className="input-field"
               />
             </FormControl>
-            <FormDescription>
-              This is your public display name.
-            </FormDescription>
+            
             <FormMessage />
           </FormItem>
         )}
