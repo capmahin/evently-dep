@@ -13,7 +13,7 @@ type DropdownProps={
 
 const Dropdown = ({value, onChangeHandler}: DropdownProps) => {
   return (
-    <Select>
+    <Select onValueChange={onChangeHandler} defaultValue={value}>
   <SelectTrigger className="w-[180px]">
     <SelectValue placeholder="Theme" />
   </SelectTrigger>
