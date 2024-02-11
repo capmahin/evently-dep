@@ -5,6 +5,7 @@ import {
     SelectTrigger,
     SelectValue,
   } from "@/components/ui/select"
+import { ICategory } from "@/lib/database/models/category.model"
 import { useState } from "react"
 
 type DropdownProps={
@@ -13,7 +14,7 @@ type DropdownProps={
 }
 
 const Dropdown = ({value, onChangeHandler}: DropdownProps) => {
-     const [first, setfirst] = useState([])
+     const [first, setfirst] = useState<ICategory[]>([])
  
 
   return (
