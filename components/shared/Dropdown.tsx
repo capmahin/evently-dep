@@ -5,6 +5,7 @@ import {
     SelectTrigger,
     SelectValue,
   } from "@/components/ui/select"
+import { useState } from "react"
 
 type DropdownProps={
     value?: string
@@ -12,10 +13,13 @@ type DropdownProps={
 }
 
 const Dropdown = ({value, onChangeHandler}: DropdownProps) => {
+     const [first, setfirst] = useState([])
+ 
+
   return (
     <Select onValueChange={onChangeHandler} defaultValue={value}>
-  <SelectTrigger className="w-[180px]">
-    <SelectValue placeholder="Theme" />
+  <SelectTrigger className="select-field">
+    <SelectValue placeholder="Category" />
   </SelectTrigger>
   <SelectContent>
     <SelectItem value="light">Light</SelectItem>
