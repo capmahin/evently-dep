@@ -63,6 +63,22 @@ const EventForm = ({userId, type}: EventFormProps) => {
           </FormItem>
         )}
       />
+      <FormField
+        control={form.control}
+        name="categoryId"
+        render={({ field }) => (
+          <FormItem className="w-full">
+            
+            <FormControl>
+              <Input placeholder="Event title" {...field} 
+              className="input-field"
+              />
+            </FormControl>
+            
+            <FormMessage />
+          </FormItem>
+        )}
+      />
       </div>
 
       
