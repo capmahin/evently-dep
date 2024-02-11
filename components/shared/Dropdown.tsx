@@ -1,8 +1,14 @@
-import React from 'react'
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+  } from "@/components/ui/select"
 
 type DropdownProps={
     value?: string
-    onChangeHandler?: (value:string)=> void
+    onChangeHandler?: ()=> void
 }
 
 const Dropdown = ({value, onChangeHandler}: DropdownProps) => {
