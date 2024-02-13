@@ -27,7 +27,7 @@ type DropdownProps={
 
 const Dropdown = ({value, onChangeHandler}: DropdownProps) => {
      const [categories, setCategories] = useState<ICategory[]>([])
- 
+     const [newCategory, setNewCategory] = useState('') 
 
   return (
     <Select onValueChange={onChangeHandler} defaultValue={value}>
@@ -44,11 +44,11 @@ const Dropdown = ({value, onChangeHandler}: DropdownProps) => {
 <AlertDialog>
   <AlertDialogTrigger className="p-medium-14 flex w-full rounded-sm py-3 pl-8 text-primary-500
   hover:bg-primary-50 focus:text-primary-500">Open</AlertDialogTrigger>
-  <AlertDialogContent className="bg-white">
+  <AlertDialogContent className="bg-white" >
     <AlertDialogHeader>
       <AlertDialogTitle>New Category</AlertDialogTitle>
       <AlertDialogDescription>
-        <Input type="text" placeholder="Category name" className="input-field mt-3"/>
+        <Input type="text" placeholder="Category name" className="input-field mt-3" onChange={(e)=>setNewCategory(e.target.value)}/>
       </AlertDialogDescription>
     </AlertDialogHeader>
     <AlertDialogFooter>
