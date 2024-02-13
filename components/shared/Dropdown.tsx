@@ -18,6 +18,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import { Input } from "../ui/input"
 
 type DropdownProps={
     value?: string
@@ -43,12 +44,11 @@ const Dropdown = ({value, onChangeHandler}: DropdownProps) => {
 <AlertDialog>
   <AlertDialogTrigger className="p-medium-14 flex w-full rounded-sm py-3 pl-8 text-primary-500
   hover:bg-primary-50 focus:text-primary-500">Open</AlertDialogTrigger>
-  <AlertDialogContent>
+  <AlertDialogContent className="bg-white">
     <AlertDialogHeader>
-      <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+      <AlertDialogTitle>New Category</AlertDialogTitle>
       <AlertDialogDescription>
-        This action cannot be undone. This will permanently delete your account
-        and remove your data from our servers.
+        <Input/>
       </AlertDialogDescription>
     </AlertDialogHeader>
     <AlertDialogFooter>
