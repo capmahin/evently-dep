@@ -1,7 +1,9 @@
+import { Dispatch, SetStateAction } from "react"
+
 type FileUpLoadProps = {
+    onFieldChange: (url: string) => void
     imageUrl: string
-    onFieldChange:(value:string)=> void
-    setFiles: (files:any[])=> void
+    setFiles: Dispatch<SetStateAction<File[]>>
 }
 
 const FileUploader = ({ imageUrl, onFieldChange, setFiles }: FileUpLoadProps) => {
