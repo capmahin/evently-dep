@@ -18,6 +18,8 @@ import { eventFormSchema } from "@/lib/validator"
 import * as z from 'zod';
 import { eventDefaultValues } from "@/constants"
 import Dropdown from "./Dropdown"
+import { Textarea } from "@/components/ui/textarea"
+
 
 
 
@@ -84,7 +86,7 @@ const EventForm = ({userId, type}: EventFormProps) => {
        <div className="flex flex-col gap-5 md:flex-row ">
        <FormField
         control={form.control}
-        name="title"
+        name="description"
         render={({ field }) => (
           <FormItem className="w-full">
             
