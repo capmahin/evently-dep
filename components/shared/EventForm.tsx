@@ -91,9 +91,7 @@ const EventForm = ({userId, type}: EventFormProps) => {
           <FormItem className="w-full">
             
             <FormControl>
-              <Input placeholder="Event title" {...field} 
-              className="input-field"
-              />
+            <Textarea placeholder="Description" {...field} className="textarea rounded-2xl" />
             </FormControl>
             
             <FormMessage />
