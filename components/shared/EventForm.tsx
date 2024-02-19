@@ -19,7 +19,7 @@ import * as z from 'zod';
 import { eventDefaultValues } from "@/constants"
 import Dropdown from "./Dropdown"
 import { Textarea } from "@/components/ui/textarea"
-import FileUploader from "./FileUploader"
+import {FileUploader} from "./FileUploader"
 import { useState } from "react"
 
 
