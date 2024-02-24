@@ -55,6 +55,12 @@ const EventForm = ({userId, type}: EventFormProps) => {
 
     if(files.length > 0){
       const uploadedImages = await startUpload(files)
+
+      if(!uploadedImages) {
+        return
+      }
+
+      uploadedImageUrl = uploadedImages[0].url
     }
   }
   return (
