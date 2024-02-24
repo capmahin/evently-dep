@@ -24,6 +24,7 @@ import {FileUploader} from "./FileUploader"
 import { useState } from "react"
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { useUploadThing } from "@/lib/uploadthing"
 
 
 
@@ -39,16 +40,22 @@ const EventForm = ({userId, type}: EventFormProps) => {
  
   const initialValues = eventDefaultValues;
 
+  const { startUpload } = useUploadThing('imageUploader')
+
   const form = useForm<z.infer<typeof eventFormSchema>>({
     resolver: zodResolver(eventFormSchema),
     defaultValues: initialValues
   })
  
-  // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof eventFormSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values)
+  
+  async function onSubmit(values: z.infer<typeof eventFormSchema>) {
+    const eventData = values;
+
+    let uploadedImageUrl = values.imageUrl;
+
+    if(files.length > 0){
+      const uploadedImages = await startUpload(files)
+    }
   }
   return (
     <Form {...form}>
