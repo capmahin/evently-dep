@@ -27,7 +27,9 @@ export const createEvent = async ({event, userId, path}: CreateEventParams)=>{
 
 export const getEventById = async (eventId: string)=>{
     try {
-        
+        await connectToDatabase();
+
+        const event = await Event.findById(eventId);
     } catch (error) {
         handleError(error);
     }
