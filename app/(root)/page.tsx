@@ -37,7 +37,15 @@ export default function Home() {
         CategoryFilter
       </div>
 
-      <Collection />
+      <Collection 
+      data={[]}
+      emptyTitle="No Events Found"
+      emptyStateSubtext="Come back later"
+      collectionType="All_Events"
+      limit={6}
+      page={1}
+      totalPages={2}
+      />
     </section>
    
    </>
