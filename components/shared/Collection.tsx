@@ -1,5 +1,6 @@
 import { IEvent } from '@/lib/database/models/event.model'
 import React from 'react'
+import Card from './Card'
 
 
 type CollectionProps = {
@@ -33,7 +34,7 @@ const Collection = ({
               
               return(
                 <li key={event._id} className='flex justify-center'>
-
+                      <Card/>
                 </li>
               )
             })}
