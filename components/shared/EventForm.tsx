@@ -26,7 +26,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useUploadThing } from "@/lib/uploadthing"
 import { useRouter } from "next/navigation"
-import { createEvent } from "@/lib/actions/event.actions"
+import { createEvent, updateEvent } from "@/lib/actions/event.actions"
 import { IEvent } from "@/lib/database/models/event.model"
 
 
@@ -96,15 +96,16 @@ const EventForm = ({userId, type,event,eventId}: EventFormProps) => {
         return;
       }
       try {
-        const newEvent = await createEvent({
-          event: { ...values, imageUrl: uploadedImageUrl },
+        const updatedEvent = await updateEvent({
+         
           userId,
-          path: '/profile'
+          event: { ...values, imageUrl: uploadedImageUrl, _id:eventId },
+          path: `/events/${eventId}`
         })
 
-        if(newEvent) {
+        if(updatedEvent) {
           form.reset();
-          router.push(`/events/${newEvent._id}`)
+          router.push(`/events/${updatedEvent._id}`)
         }
       } catch (error) {
         console.log(error);
