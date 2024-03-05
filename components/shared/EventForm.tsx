@@ -90,7 +90,29 @@ const EventForm = ({userId, type,event,eventId}: EventFormProps) => {
         console.log(error);
       }
     }
+    if(type === 'Update'){
+      if(!eventId){
+        router.back()
+        return;
+      }
+      try {
+        const newEvent = await createEvent({
+          event: { ...values, imageUrl: uploadedImageUrl },
+          userId,
+          path: '/profile'
+        })
+
+        if(newEvent) {
+          form.reset();
+          router.push(`/events/${newEvent._id}`)
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
   }
+
+  
   return (
     <Form {...form}>
     <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-5">
