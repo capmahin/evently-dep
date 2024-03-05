@@ -9,7 +9,9 @@ type CardProps = {
 
 const Card = ({ event, hasOrderLink, hidePrice }: CardProps) => {
   return (
-    <div>Card</div>
+    <div className='group relative flex min-h-[380px] w-full max-w-[400px] flex-col overflow-hidden rounded-xl bg-white'>
+
+    </div>
   )
 }
 
