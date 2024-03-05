@@ -27,6 +27,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useUploadThing } from "@/lib/uploadthing"
 import { useRouter } from "next/navigation"
 import { createEvent } from "@/lib/actions/event.actions"
+import { IEvent } from "@/lib/database/models/event.model"
 
 
 
@@ -34,10 +35,12 @@ import { createEvent } from "@/lib/actions/event.actions"
 type EventFormProps ={
     userId:string
     type: "Create" | "Update"
+    event?: IEvent,
+    eventId?:string
 }
 
 
-const EventForm = ({userId, type}: EventFormProps) => {
+const EventForm = ({userId, type,event,eventId}: EventFormProps) => {
   const [files, setFiles] = useState<File[]>([])
  
   const initialValues = eventDefaultValues;
