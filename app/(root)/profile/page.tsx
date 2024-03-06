@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button'
+import Link from 'next/link'
 import React from 'react'
 
 const ProfilePage = () => {
@@ -12,7 +13,9 @@ const ProfilePage = () => {
                 Mt Tickets 
             </h3>
             <Button asChild size="lg" className="button hidden sm:flex">
-              
+              <Link href="/#events">
+                Explore More Events
+              </Link>
             </Button>
          </div>
      </section>
