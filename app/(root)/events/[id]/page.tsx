@@ -66,7 +66,12 @@ const EventDetails = async({params:{id}}: SearchParamProps) => {
          </div>
        </div>
     </section>
-    </>
+
+    <section className="wrapper my-8 flex flex-col gap-8 md:gap-12">
+
+      </section>    
+      
+      </>
     
   )
 }
