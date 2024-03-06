@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button'
 import React from 'react'
 
 const ProfilePage = () => {
@@ -10,6 +11,9 @@ const ProfilePage = () => {
             <h3 className='h3-bold text-center sm:text-left'>
                 Mt Tickets 
             </h3>
+            <Button asChild size="lg" className="button hidden sm:flex">
+              
+            </Button>
          </div>
      </section>
 
