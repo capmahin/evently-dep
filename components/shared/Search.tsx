@@ -13,7 +13,11 @@ const Search = () => {
         
       <Image src="/assets/icons/search.svg" alt='search' width={24}
       height={24}/>
-      <Input/>
+      <Input
+      type='text'
+      placeholder='Search'
+      onChange={(e)=> setQuery(e.target.value)}
+      />
     </div>
   )
 }
