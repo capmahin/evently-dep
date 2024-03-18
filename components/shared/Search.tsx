@@ -4,13 +4,23 @@
 import Image from 'next/image';
 import { useEffect, useState } from 'react'
 import { Input } from '../ui/input';
+import { formUrlQuery } from '@/lib/utils';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 const Search = () => {
     const [query, setQuery] = useState('');
+    const router = useRouter();
+    const searchParams = useSearchParams();
     useEffect(()=>{
       const delayDebounceFn = setTimeout(()=>{
-        
-      })
+        if(query){
+          const newUrl = formUrlQuery({
+            params: searchParams.toString(),
+          key: 'query',
+          value: query
+          })
+        }
+      }, 300)
     },[query])
   return (
     <div className='flex-center min-h-[54px] w-full overflow-hidden rounded-full
