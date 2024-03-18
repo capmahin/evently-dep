@@ -8,11 +8,14 @@ import Link from "next/link";
 
 export default async function Home({ searchParams }: SearchParamProps) {
   const page = Number(searchParams?.page) || 1;
+  const searchText = (searchParams?.query as string) || '';
+  const category = (searchParams?.category as string) || '';
+
    const events = await getAllEvents({
-    query: '',
-    category:'',
-    page: 1,
-    limit:6
+    query: searchText,
+    category,
+    page,
+    limit: 6
    })
   return (
    <>
