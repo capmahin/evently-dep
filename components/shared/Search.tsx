@@ -4,7 +4,7 @@
 import Image from 'next/image';
 import { useEffect, useState } from 'react'
 import { Input } from '../ui/input';
-import { formUrlQuery } from '@/lib/utils';
+import { formUrlQuery, removeKeysFromQuery } from '@/lib/utils';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 const Search = () => {
@@ -12,6 +12,7 @@ const Search = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
     useEffect(()=>{
+      let newUrl = '';
       const delayDebounceFn = setTimeout(()=>{
         if(query){
           const newUrl = formUrlQuery({
@@ -20,8 +21,16 @@ const Search = () => {
           value: query
           })
         }
+        else {
+          newUrl = removeKeysFromQuery({
+            params: searchParams.toString(),
+            keysToRemove: ['query']
+          })
+        }
+        router.push(newUrl, { scroll: false });
       }, 300)
-    },[query])
+      return () => clearTimeout(delayDebounceFn);
+    },[query,searchParams,router])
   return (
     <div className='flex-center min-h-[54px] w-full overflow-hidden rounded-full
     bg-grey-50 px-4 py-2'>
