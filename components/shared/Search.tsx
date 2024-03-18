@@ -8,7 +8,9 @@ import { Input } from '../ui/input';
 const Search = () => {
     const [query, setQuery] = useState('');
     useEffect(()=>{
-
+      const delayDebounceFn = setTimeout(()=>{
+        
+      })
     },[query])
   return (
     <div className='flex-center min-h-[54px] w-full overflow-hidden rounded-full
