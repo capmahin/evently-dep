@@ -2,11 +2,14 @@
 
 
 import Image from 'next/image';
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Input } from '../ui/input';
 
 const Search = () => {
     const [query, setQuery] = useState('');
+    useEffect(()=>{
+
+    },[query])
   return (
     <div className='flex-center min-h-[54px] w-full overflow-hidden rounded-full
     bg-grey-50 px-4 py-2'>
