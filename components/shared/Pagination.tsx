@@ -18,7 +18,9 @@ const Pagination = ({page, totalPages, urlParamName}:
   const searchParams = useSearchParams()
 
   const onClick = (btnType: string)=>{
-
+    const pageValue = btnType === 'next' 
+    ? Number(page) + 1 
+    : Number(page) - 1
   }
   return (
     <div className='flex gap-2'>
@@ -38,7 +40,7 @@ const Pagination = ({page, totalPages, urlParamName}:
       onClick={()=> onClick('next')}
       disabled={Number(page) >= totalPages}
       >
-        Previous
+        Next
       </Button>
     </div>
   )
