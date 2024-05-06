@@ -31,6 +31,15 @@ const Pagination = ({page, totalPages, urlParamName}:
       >
         Previous
       </Button>
+      <Button
+      size='lg'
+      variant='outline'
+      className='w-28'
+      onClick={()=> onClick('next')}
+      disabled={Number(page) >= totalPages}
+      >
+        Previous
+      </Button>
     </div>
   )
 }
