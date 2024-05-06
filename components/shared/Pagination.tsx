@@ -2,6 +2,7 @@
 
 import { useRouter, useSearchParams } from 'next/navigation'
 import React from 'react'
+import { Button } from '../ui/button'
 
 type PaginationProps ={
   page: number | string,
@@ -20,7 +21,11 @@ const Pagination = ({page, totalPages, urlParamName}:
 
   }
   return (
-    <div className='flex gap-2'>Pagination</div>
+    <div className='flex gap-2'>
+      <Button>
+        Previous
+      </Button>
+    </div>
   )
 }
 
