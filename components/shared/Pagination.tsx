@@ -1,3 +1,5 @@
+"use client"
+
 import { useRouter, useSearchParams } from 'next/navigation'
 import React from 'react'
 
@@ -13,8 +15,12 @@ const Pagination = ({page, totalPages, urlParamName}:
 ) => {
   const router = useRouter()
   const searchParams = useSearchParams()
+
+  const onClick = (btnType: string)=>{
+
+  }
   return (
-    <div>Pagination</div>
+    <div className='flex gap-2'>Pagination</div>
   )
 }
 
