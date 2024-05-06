@@ -22,7 +22,11 @@ const Pagination = ({page, totalPages, urlParamName}:
   }
   return (
     <div className='flex gap-2'>
-      <Button>
+      <Button
+      size='lg'
+      variant='outline'
+      className='w-28'
+      >
         Previous
       </Button>
     </div>
