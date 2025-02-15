@@ -23,9 +23,17 @@ export default async function Home({ searchParams }: SearchParamProps) {
       <section className="bg-primary-50 bg-dotted-pattern bg-contain py-5 md:py-10">
         <div className="wrapper grid grid-cols-1 gap-5 md:grid-cols-2 2xl:gap-0">
           <div className="flex flex-col justify-center gap-8">
-            <h1 className="h1-bold">Bark & Bite!</h1>
-            <p className="p-regular-20 md:p-regular-24">
+            <h1 className="h1-bold text-blue-700">Bark & Bite!</h1>
+            <p className="p-regular-24 md:p-regular-30 text-purple-500">
               “Pet Foods and Accessories E-Commerce Website”
+            </p>
+            <p className="p-regular-20 md:p-regular-24">
+              The pet industry is rapidly growing, with increasing demand for
+              pet food, toys, and accessories. This project aims to develop an
+              e-commerce platform where pet owners can conveniently browse,
+              select, and purchase pet-related products. The platform will
+              provide an intuitive and seamless shopping experience, ensuring
+              customer satisfaction and business efficiency.
             </p>
             <Button size="lg" asChild className="button w-full sm:w-fit">
               <Link href="#events">Explore Now</Link>
