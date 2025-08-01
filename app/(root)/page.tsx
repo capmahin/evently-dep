@@ -54,7 +54,7 @@ export default async function Home({ searchParams }: SearchParamProps) {
         className="wrapper my-8 flex flex-col gap-8 md:gap-12"
       >
         <h2 className="h2-bold">
-          Trust by <br /> Thousands of Peoples
+          Assignments for Students <br />
         </h2>
 
         <div className="flex w-full flex-col gap-5 md:flex-row">
@@ -64,7 +64,7 @@ export default async function Home({ searchParams }: SearchParamProps) {
 
         <Collection
           data={events?.data}
-          emptyTitle="No Events Found"
+          emptyTitle="No Assignment Found"
           emptyStateSubtext="Come back later"
           collectionType="All_Events"
           limit={6}
