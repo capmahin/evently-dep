@@ -10,8 +10,8 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Bark & Bite",
-  description: "Bark & Bite is a platform for Food Selling .",
+  title: "Teacher Dashboard",
+  description: "Teacher Dashboard for Managing Assignments.",
   icons: {
     icon: "/assets/images/logo.svg"
   }
