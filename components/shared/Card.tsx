@@ -66,12 +66,13 @@ const Card = ({ event, hasOrderLink, hidePrice }: CardProps) => {
 
         <div className="flex-between w-full">
           <p className="p-medium-14 md:p-medium-16 text-grey-600">
-            {event.organizer.firstName} {event.organizer.lastName}
+            {/* {event.organizer.firstName} {event.organizer.lastName} */}
+            teacher
           </p>
           {/* //Assignment organizer */}
           {hasOrderLink && (
             <Link href={`/orders?eventId=${event._id}`} className="flex gap-2">
-              <p className="text-primary-500">Order Details</p>
+              <p className="text-primary-500">Assignment Details</p>
               <Image
                 src="/assets/icons/arrow.svg"
                 alt="search"
