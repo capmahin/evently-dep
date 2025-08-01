@@ -49,14 +49,14 @@ const Card = ({ event, hasOrderLink, hidePrice }: CardProps) => {
               {event.isFree ? "FREE" : `$${event.price}`}
             </span>
             <p className="p-semibold-14 w-min rounded-full bg-grey-500/10 px-4 py-1 text-grey-500 line-clamp-1">
-              {/* {event.category.name} */}
+              {event.category.name}
             </p>
           </div>
         )}
 
-        {/* <p className="p-medium-16 p-medium-18 text-grey-500">
+        <p className="p-medium-16 p-medium-18 text-grey-500">
           {formatDateTime(event.startDateTime).dateTime}
-        </p> */}
+        </p>
 
         <Link href={`/events/${event._id}`}>
           <p className="p-medium-16 md:p-medium-20 line-clamp-2 flex-1 text-black">
@@ -65,10 +65,10 @@ const Card = ({ event, hasOrderLink, hidePrice }: CardProps) => {
         </Link>
 
         <div className="flex-between w-full">
-          {/* <p className="p-medium-14 md:p-medium-16 text-grey-600">
+          <p className="p-medium-14 md:p-medium-16 text-grey-600">
             {event.organizer.firstName} {event.organizer.lastName}
-          </p> */}
-          {/* //Event organizer */}
+          </p>
+          {/* //Assignment organizer */}
           {hasOrderLink && (
             <Link href={`/orders?eventId=${event._id}`} className="flex gap-2">
               <p className="text-primary-500">Order Details</p>
