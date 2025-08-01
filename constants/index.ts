@@ -1,16 +1,20 @@
 export const headerLinks = [
   {
     label: "Home",
-    route: "/",
+    route: "/"
   },
   {
     label: "Create assignments",
-    route: "/events/create",
+    route: "/events/create"
+  },
+  {
+    label: "student assignments",
+    route: "/events/studentform"
   },
   {
     label: "My Profile",
-    route: "/profile",
-  },
+    route: "/profile"
+  }
 ];
 
 export const eventDefaultValues = {
@@ -23,5 +27,5 @@ export const eventDefaultValues = {
   categoryId: "",
   price: "",
   isFree: false,
-  url: "",
+  url: ""
 };

@@ -97,7 +97,7 @@ const EventDetails = async ({
         <h2 className="h2-bold">Related Subject</h2>
         <Collection
           data={relatedEvents?.data}
-          emptyTitle="No Assignment Found"
+          emptyTitle="No Ass Found"
           emptyStateSubtext="Come back later"
           collectionType="All_Events"
           limit={3}
