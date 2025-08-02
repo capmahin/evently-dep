@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { DeleteConfirmation } from "./DeleteConfirmation";
+import { Button } from "../ui/button";
 
 type CardProps = {
   event: IEvent;
@@ -72,13 +73,9 @@ const Card = ({ event, hasOrderLink, hidePrice }: CardProps) => {
           {/* //Assignment organizer */}
           {hasOrderLink && (
             <Link href={`/orders?eventId=${event._id}`} className="flex gap-2">
-              <p className="text-primary-500">Assignment Details</p>
-              <Image
-                src="/assets/icons/arrow.svg"
-                alt="search"
-                width={10}
-                height={10}
-              />
+              <Button role="link" size="lg" className="button sm:w-fit">
+                Assignment Details
+              </Button>
             </Link>
           )}
         </div>
