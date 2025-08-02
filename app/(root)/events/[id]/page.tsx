@@ -1,5 +1,6 @@
 import CheckoutButton from "@/components/shared/CheckoutButton";
 import Collection from "@/components/shared/Collection";
+import { Button } from "@/components/ui/button";
 import {
   getEventById,
   getRelatedEventsByCategory
@@ -7,6 +8,7 @@ import {
 import { formatDateTime } from "@/lib/utils";
 import { SearchParamProps } from "@/types";
 import Image from "next/image";
+import Link from "next/link";
 
 const EventDetails = async ({
   params: { id },
@@ -76,8 +78,8 @@ const EventDetails = async ({
                 <Image
                   src="/assets/icons/location.svg"
                   alt="location"
-                  width={32}
-                  height={32}
+                  width={24}
+                  height={24}
                 />
                 <p className="p-medium-16 lg:p-regular-20">{event.location}</p>
               </div>
@@ -88,6 +90,12 @@ const EventDetails = async ({
               <p className="p-medium-16 lg:p-regular-18 truncate text-primary-500 underline">
                 {event.url}
               </p>
+
+              <Link href="/events/studentform">
+                <Button variant="link" className="p-medium-16 lg:p-regular-20">
+                  Form
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
