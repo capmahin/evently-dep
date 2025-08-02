@@ -92,8 +92,8 @@ const EventDetails = async ({
               </p>
 
               <Link href="/events/studentform">
-                <Button variant="link" className="p-medium-16 lg:p-regular-20">
-                  Form
+                <Button role="link" size="lg" className="button sm:w-fit">
+                  Submit Assignment
                 </Button>
               </Link>
             </div>

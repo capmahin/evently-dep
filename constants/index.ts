@@ -7,10 +7,7 @@ export const headerLinks = [
     label: "Create assignments",
     route: "/events/create"
   },
-  {
-    label: "student assignments",
-    route: "/events/studentform"
-  },
+
   {
     label: "My Profile",
     route: "/profile"
