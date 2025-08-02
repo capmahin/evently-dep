@@ -121,7 +121,7 @@ const StudentForm = ({ userId, type, event, eventId }: EventFormProps) => {
               <FormItem className="w-full">
                 <FormControl>
                   <Input
-                    placeholder="Submit  Assignment title"
+                    placeholder="Submit Assignment title"
                     {...field}
                     className="input-field"
                   />
