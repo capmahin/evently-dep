@@ -10,8 +10,8 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Teacher Dashboard",
-  description: "Teacher Dashboard for Managing Assignments.",
+  title: "T-shirt Menea",
+  description: "Part of the exclusive Tanjim Race Collection.",
   icons: {
     icon: "/assets/images/logo.svg"
   }

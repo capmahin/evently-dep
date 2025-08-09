@@ -4,12 +4,12 @@ export const headerLinks = [
     route: "/"
   },
   {
-    label: "Create assignments",
+    label: "Create Product",
     route: "/events/create"
   },
 
   {
-    label: "Student Assignment Submission list",
+    label: "Products",
     route: "/profile"
   }
 ];
