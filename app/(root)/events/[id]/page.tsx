@@ -93,7 +93,7 @@ const EventDetails = async ({
 
               <Link href="/events/studentform">
                 <Button role="link" size="lg" className="button sm:w-fit">
-                  Submit Assignment
+                  Submit New Product
                 </Button>
               </Link>
             </div>
@@ -102,10 +102,10 @@ const EventDetails = async ({
       </section>
       {/* EVENTS with the same category */}
       <section className="wrapper my-8 flex flex-col gap-8 md:gap-12">
-        <h2 className="h2-bold">Related Subject</h2>
+        <h2 className="h2-bold">Related Product</h2>
         <Collection
           data={relatedEvents?.data}
-          emptyTitle="No Ass Found"
+          emptyTitle="No Products Found"
           emptyStateSubtext="Come back later"
           collectionType="All_Events"
           limit={3}
