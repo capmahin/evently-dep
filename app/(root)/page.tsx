@@ -25,7 +25,10 @@ export default async function Home({ searchParams }: SearchParamProps) {
         className="wrapper my-8 flex flex-col gap-8 md:gap-12"
       >
         <h2 className="h2-bold">
-          Assignments for Students <br />
+          <p className="text-center text-blue-700">
+            Welcome to T-Shirts Meenia{" "}
+          </p>
+          <br />
         </h2>
 
         <div className="flex w-full flex-col gap-5 md:flex-row">
@@ -35,7 +38,7 @@ export default async function Home({ searchParams }: SearchParamProps) {
 
         <Collection
           data={events?.data}
-          emptyTitle="No Assignment Found"
+          emptyTitle="No Products Found"
           emptyStateSubtext="Come back later"
           collectionType="All_Events"
           limit={6}

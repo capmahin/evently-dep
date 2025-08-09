@@ -14,7 +14,7 @@ const Footer = () => {
           />
         </Link>
 
-        <p>2025 Assignment teacher & students. All Rights reserve</p>
+        <p>2025 T-shirt and Jeans. All Rights reserve</p>
       </div>
     </footer>
   );
