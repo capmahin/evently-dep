@@ -121,7 +121,7 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
               <FormItem className="w-full">
                 <FormControl>
                   <Input
-                    placeholder="Assignment title"
+                    placeholder="Product title"
                     {...field}
                     className="input-field"
                   />
@@ -157,7 +157,7 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
               <FormItem className="w-full">
                 <FormControl className="h-72">
                   <Textarea
-                    placeholder="Assignment Description"
+                    placeholder="Product Description"
                     {...field}
                     className="textarea rounded-2xl"
                   />
@@ -201,7 +201,7 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
                     />
 
                     <Input
-                      placeholder="Assignment Online"
+                      placeholder="Product Online"
                       {...field}
                       className="input-field"
                     />
@@ -317,7 +317,7 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
                                 onCheckedChange={field.onChange}
                                 checked={field.value}
                                 id="isFree"
-                                className="mr-2 h-5 w-5 border-2 border-primary-500"
+                                className="mr-2 h-5 w-5 border-2 border-blue-500"
                               />
                             </div>
                           </FormControl>
@@ -364,9 +364,7 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
           disabled={form.formState.isSubmitting}
           className="button col-span-2 w-full"
         >
-          {form.formState.isSubmitting
-            ? "Submitting..."
-            : `${type} Assignment `}
+          {form.formState.isSubmitting ? "Submitting..." : `${type} Product `}
         </Button>
       </form>
     </Form>

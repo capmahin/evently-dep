@@ -9,8 +9,8 @@ const CreateEvent = () => {
   return (
     <>
       <section className="bg-primary-50 bg-dotted-pattern bg-cover bg-center py-5 md:py-10">
-        <h3 className="wrapper h3-bold text-center sm:text-left">
-          Create Assignment for Students
+        <h3 className="wrapper h3-bold text-center text-blue-700 sm:text-left">
+          Create Product for Customer
         </h3>
       </section>
 
