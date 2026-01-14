@@ -91,11 +91,7 @@ const EventDetails = async ({
                 {event.url}
               </p>
 
-              <Link href="/events/studentform">
-                <Button role="link" size="lg" className="button sm:w-fit">
-                  Submit New Product
-                </Button>
-              </Link>
+              
             </div>
           </div>
         </div>
@@ -105,7 +101,7 @@ const EventDetails = async ({
         <h2 className="h2-bold">Related Product</h2>
         <Collection
           data={relatedEvents?.data}
-          emptyTitle="No Products Found"
+          emptyTitle="No Packages Found"
           emptyStateSubtext="Come back later"
           collectionType="All_Events"
           limit={3}

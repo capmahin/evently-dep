@@ -4,12 +4,33 @@ export const headerLinks = [
     route: "/"
   },
   {
-    label: "Create Product",
+    label: "flight",
+    route: "/"
+  },
+  {
+    label: "hotel",
+    route: "/"
+  },
+  {
+    label: "shop",
+    route: "/"
+  },
+  {
+    label: "Holiday Packages",
+    route: "/"
+  },
+  {
+    label: "Gift Cards",
+    route: "/"
+  },
+
+  {
+    label: "Create Packages",
     route: "/events/create"
   },
 
   {
-    label: "Products",
+    label: "Packages",
     route: "/profile"
   }
 ];

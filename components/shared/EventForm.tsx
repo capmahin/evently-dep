@@ -121,7 +121,7 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
               <FormItem className="w-full">
                 <FormControl>
                   <Input
-                    placeholder="Product title"
+                    placeholder="Package title"
                     {...field}
                     className="input-field"
                   />
@@ -157,7 +157,7 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
               <FormItem className="w-full">
                 <FormControl className="h-72">
                   <Textarea
-                    placeholder="Product Description"
+                    placeholder="Package  Description"
                     {...field}
                     className="textarea rounded-2xl"
                   />
@@ -201,7 +201,7 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
                     />
 
                     <Input
-                      placeholder="Product Online"
+                      placeholder="Package Online"
                       {...field}
                       className="input-field"
                     />
@@ -362,9 +362,9 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
           type="submit"
           size="lg"
           disabled={form.formState.isSubmitting}
-          className="button col-span-2 w-full"
+          className="button col-span-2 w-full bg-blue-600 hover:bg-blue-700"
         >
-          {form.formState.isSubmitting ? "Submitting..." : `${type} Product `}
+          {form.formState.isSubmitting ? "Submitting..." : `${type} Package `}
         </Button>
       </form>
     </Form>
