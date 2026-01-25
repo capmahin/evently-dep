@@ -4,7 +4,11 @@ This document explains and fixes common issues with deploying Next.js applicatio
 
 ## Common Deployment Issues & Solutions
 
-### Issue 1: Static Redirects for Dynamic Routes
+### Issue 1: Node.js Version
+**Problem**: Platforms like Vercel now require newer Node.js versions (24.x)
+**Solution**: Update your deployment platform settings to use Node.js 24.x
+
+### Issue 2: Static Redirects for Dynamic Routes
 **Problem**: Using `[[redirects]]` with Next.js apps causes routing issues for dynamic routes.
 **Solution**: Remove static redirects as Next.js handles client-side routing internally.
 
@@ -27,7 +31,7 @@ This document explains and fixes common issues with deploying Next.js applicatio
 [build]
   command = "npm run build"
   publish = ".next"
-  environment = { NODE_VERSION = "18" }
+  environment = { NODE_VERSION = "24" }
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"

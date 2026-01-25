@@ -4,7 +4,11 @@ This document explains how to properly deploy the Evently application to Vercel.
 
 ## Common Vercel Deployment Issues & Solutions
 
-### Issue 1: Next.js Configuration
+### Issue 1: Node.js Version
+**Problem**: Vercel now requires Node.js 24.x instead of older versions
+**Solution**: Update your project settings to use Node.js 24.x
+
+### Issue 2: Next.js Configuration
 **Problem**: Vercel has specific requirements for Next.js configuration
 **Solution**: Ensure proper Next.js configuration without conflicting settings
 
@@ -43,6 +47,9 @@ This document explains how to properly deploy the Evently application to Vercel.
 ```json
 {
   "version": 2,
+  "settings": {
+    "nodeVersion": "24"
+  },
   "builds": [
     {
       "src": "package.json",
