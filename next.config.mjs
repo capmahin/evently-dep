@@ -15,8 +15,8 @@ const nextConfig = {
             }
         ]
       },
-    // Enable trailing slash to ensure compatibility with Netlify
-    trailingSlash: 'ignore'
+    // Vercel handles routing automatically
+    trailingSlash: undefined // Let Vercel handle routing
 };
 
 export default nextConfig;
