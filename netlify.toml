@@ -5,3 +5,15 @@
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
+
+[template.environment]
+  MONGODB_URI = "Your MongoDB connection string"
+  NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY = "Your Clerk publishable key"
+  CLERK_SECRET_KEY = "Your Clerk secret key"
+  NEXT_PUBLIC_SERVER_URL = "https://your-site-name.netlify.app"
+  UPLOADTHING_SECRET = "Your UploadThing secret"
+  UPLOADTHING_APP_ID = "Your UploadThing app ID"
+  STRIPE_SECRET_KEY = "Your Stripe secret key"
+  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY = "Your Stripe publishable key"
+  STRIPE_WEBHOOK_SECRET = "Your Stripe webhook secret"
+  WEBHOOK_SECRET = "Your webhook secret"
