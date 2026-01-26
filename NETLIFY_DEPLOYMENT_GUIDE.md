@@ -19,9 +19,6 @@ CLERK_SECRET_KEY=your_clerk_secret_key
 NEXT_PUBLIC_SERVER_URL=https://your-site-name.netlify.app
 UPLOADTHING_SECRET=your_uploadthing_secret
 UPLOADTHING_APP_ID=your_uploadthing_app_id
-STRIPE_SECRET_KEY=your_stripe_secret_key
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
-STRIPE_WEBHOOK_SECRET=your_stripe_webhook_secret
 WEBHOOK_SECRET=your_webhook_secret
 ```
 
@@ -90,9 +87,8 @@ Go to your Netlify dashboard:
 - Add all the required environment variables
 
 ### 4. Webhooks Configuration
-If using Stripe and Clerk webhooks:
+If using Clerk webhooks:
 - Update webhook URLs to point to your deployed site
-- Stripe webhook: `https://your-site-name.netlify.app/api/webhook/stripe`
 - Clerk webhook: `https://your-site-name.netlify.app/api/webhook/clerk`
 
 ## Troubleshooting
@@ -106,7 +102,7 @@ If using Stripe and Clerk webhooks:
 
 ### Debugging:
 - Check Netlify build logs for errors
-- Verify all external services (MongoDB, Clerk, Stripe, UploadThing) are configured correctly
+- Verify all external services (MongoDB, Clerk, UploadThing) are configured correctly
 - Test the deployed application thoroughly
 
 ## Performance Optimization

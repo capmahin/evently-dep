@@ -21,6 +21,7 @@ export const headerLinks = [
     route: "/events/create"
   },
 
+
   {
     label: "Our-Packages",
     route: "/profile"
@@ -38,4 +39,15 @@ export const eventDefaultValues = {
   price: "",
   isFree: false,
   url: ""
+};
+
+export const orderDefaultValues = {
+  whatsappNumber: "",
+  totalAmount: "",
+  eventId: "",
+  buyerName: "",
+  buyerNumber: "",
+  buyerEmail: "",
+  status: "pending" as const,
+  createdAt: new Date().toISOString().split('T')[0],
 };

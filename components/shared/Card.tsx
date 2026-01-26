@@ -23,7 +23,7 @@ const Card = ({ event, hasOrderLink, hidePrice }: CardProps) => {
     <div className="group relative flex min-h-[420px] w-full max-w-[380px] flex-col overflow-hidden rounded-xl bg-white shadow-lg transition-all hover:shadow-2xl hover:scale-[1.02] duration-300">
       {/* Event Image */}
       <div className="relative h-56 w-full overflow-hidden">
-        <Link href={`/events/${event._id}`}>
+        <Link href={`/events/${event._id.toString()}`}>
           <Image
             src={event.imageUrl}
             alt={event.title}
@@ -38,7 +38,7 @@ const Card = ({ event, hasOrderLink, hidePrice }: CardProps) => {
         {isEventCreator && !hidePrice && (
           <div className="absolute right-3 top-3 flex gap-2 rounded-lg bg-white/90 backdrop-blur-sm p-2 shadow-md">
             <Link 
-              href={`/events/${event._id}/update`}
+              href={`/events/${event._id.toString()}/update`}
               className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-50 hover:bg-blue-100 transition-colors"
               title="Edit Event"
             >
@@ -51,7 +51,7 @@ const Card = ({ event, hasOrderLink, hidePrice }: CardProps) => {
               />
             </Link>
 
-            <DeleteConfirmation eventId={event._id} />
+            <DeleteConfirmation eventId={event._id.toString()} />
           </div>
         )}
 
@@ -63,7 +63,8 @@ const Card = ({ event, hasOrderLink, hidePrice }: CardProps) => {
                 ? 'bg-emerald-100 text-emerald-800' 
                 : 'bg-blue-100 text-blue-800'
             }`}>
-              {event.isFree ? "FREE" : `$${event.price}`}
+              {event.isFree ? "ফ্রি" : `${event.price}টাকা
+              `}
             </span>
           </div>
         )}
@@ -93,7 +94,7 @@ const Card = ({ event, hasOrderLink, hidePrice }: CardProps) => {
         </div>
 
         {/* Event Title */}
-        <Link href={`/events/${event._id}`} className="group/title mb-4">
+        <Link href={`/events/${event._id.toString()}`} className="group/title mb-4">
           <h3 className="text-xl font-bold text-gray-900 line-clamp-2 group-hover/title:text-blue-600 transition-colors">
             {event.title}
           </h3>
@@ -106,45 +107,52 @@ const Card = ({ event, hasOrderLink, hidePrice }: CardProps) => {
           </p>
         )}
 
-        {/* Footer Section */}
         <div className="mt-auto pt-4 border-t border-gray-100">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center">
-                <span className="text-white text-xs font-bold">
-                  {event.organizer.firstName?.[0] || 'A'}
-                </span>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-gray-900">
-                  {event.organizer.firstName} {event.organizer.lastName}
-                </p>
-                <p className="text-xs text-gray-500">Organizer</p>
-              </div>
-            </div>
-
-            {/* Action Button */}
-            {hasOrderLink ? (
-              <Link href={`/orders?eventId=${event._id}`}>
-                <Button 
-                  className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all hover:shadow-lg"
-                >
-                  View Details
-                  <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                  </svg>
-                </Button>
-              </Link>
-            ) : (
-              <Link href={`/events/${event._id}`}>
+          {/* Action Button */}
+          {hasOrderLink ? (
+            <Link href={`/orders/create?eventId=${event._id.toString()}`}>
+              <Button 
+                className="mb-3 w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all hover:shadow-lg"
+              >
+                View Details
+                <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+              </Button>
+            </Link>
+          ) : (
+            <div className="flex gap-2 mb-3">
+              <Link href={`/events/${event._id.toString()}`} className="flex-1">
                 <Button 
                   variant="outline"
-                  className="border-blue-200 text-blue-600 hover:bg-blue-50 px-4 py-2 rounded-lg text-sm font-medium transition-all"
+                  className="w-full border-blue-200 text-blue-600 hover:bg-blue-50 px-4 py-2 rounded-lg text-sm font-medium transition-all"
                 >
-                  Learn More
+                  More Details
                 </Button>
               </Link>
-            )}
+              <Link href={`/orders/create?eventId=${event._id.toString()}`} className="flex-1">
+                <Button 
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all"
+                >
+                  Book Now!
+                </Button>
+              </Link>
+            </div>
+          )}
+          
+          {/* Footer Section */}
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center">
+              <span className="text-white text-xs font-bold">
+                {event.organizer.firstName?.[0] || 'A'}
+              </span>
+            </div>
+            <div className="flex-1">
+              <p className="text-sm font-medium text-gray-900 truncate">
+                {event.organizer.firstName} {event.organizer.lastName}
+              </p>
+              <p className="text-xs text-gray-500">Organizer</p>
+            </div>
           </div>
         </div>
       </div>

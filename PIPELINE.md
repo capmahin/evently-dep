@@ -29,9 +29,6 @@ Add these secrets to your GitHub repository:
 - `NEXT_PUBLIC_SERVER_URL` - Deployed site URL
 - `UPLOADTHING_SECRET` - UploadThing secret
 - `UPLOADTHING_APP_ID` - UploadThing app ID
-- `STRIPE_SECRET_KEY` - Stripe secret key
-- `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` - Stripe publishable key
-- `STRIPE_WEBHOOK_SECRET` - Stripe webhook secret
 - `WEBHOOK_SECRET` - Webhook secret
 - `NETLIFY_AUTH_TOKEN` - Netlify authentication token
 - `NETLIFY_SITE_ID` - Netlify site ID
@@ -92,9 +89,6 @@ The `netlify.toml` file includes:
 - `NEXT_PUBLIC_SERVER_URL` - Base URL for webhooks
 - `UPLOADTHING_SECRET` - File upload service
 - `UPLOADTHING_APP_ID` - UploadThing app identifier
-- `STRIPE_SECRET_KEY` - Payment processing
-- `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` - Client-side payments
-- `STRIPE_WEBHOOK_SECRET` - Payment confirmation
 - `WEBHOOK_SECRET` - Webhook validation
 
 ## Deployment Process
@@ -114,7 +108,6 @@ The `netlify.toml` file includes:
 2. **Missing Assets**: Verify static files are properly configured
 3. **Database Connection**: Ensure MONGODB_URI is correct
 4. **Authentication**: Confirm Clerk keys are properly set
-5. **Payments**: Verify Stripe keys and webhook configuration
 
 ### Debugging:
 

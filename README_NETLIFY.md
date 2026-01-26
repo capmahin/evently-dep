@@ -4,7 +4,6 @@
 Evently is a Next.js application that can be deployed to Netlify. This project includes features like:
 - User authentication with Clerk
 - Database integration with MongoDB
-- Payment processing with Stripe
 - File uploads with UploadThing
 - Event management system
 
@@ -19,8 +18,7 @@ Evently is a Next.js application that can be deployed to Netlify. This project i
 ### Required Services
 1. **MongoDB Atlas** - For database storage
 2. **Clerk** - For authentication
-3. **Stripe** - For payment processing
-4. **UploadThing** - For file uploads
+3. **UploadThing** - For file uploads
 
 ### Environment Variables Required
 ```bash
@@ -30,9 +28,6 @@ CLERK_SECRET_KEY=your_clerk_secret_key
 NEXT_PUBLIC_SERVER_URL=https://your-site-name.netlify.app
 UPLOADTHING_SECRET=your_uploadthing_secret
 UPLOADTHING_APP_ID=your_uploadthing_app_id
-STRIPE_SECRET_KEY=your_stripe_secret_key
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
-STRIPE_WEBHOOK_SECRET=your_stripe_webhook_secret
 WEBHOOK_SECRET=your_webhook_secret
 ```
 
@@ -67,7 +62,6 @@ WEBHOOK_SECRET=your_webhook_secret
 - [ ] Database connects properly
 - [ ] Authentication works (Clerk)
 - [ ] File uploads work (UploadThing)
-- [ ] Payment processing works (Stripe)
 - [ ] All pages render correctly
 - [ ] Environment variables are properly loaded
 
@@ -84,7 +78,6 @@ The project includes:
 1. **Build fails**: Check environment variables and dependencies
 2. **Database connection**: Verify MONGODB_URI is correct
 3. **Authentication**: Ensure Clerk keys are properly set
-4. **Payment processing**: Verify Stripe keys are correct
 
 ### Debugging Tips
 - Check Netlify build logs

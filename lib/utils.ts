@@ -87,7 +87,23 @@ export function removeKeysFromQuery({ params, keysToRemove }: RemoveUrlQueryPara
   )
 }
 
-export const handleError = (error: unknown) => {
-  console.error(error)
-  throw new Error(typeof error === 'string' ? error : JSON.stringify(error))
+export const handleError = (error: unknown): never => {
+  console.error('Error caught:', error);
+  
+  let errorMessage: string;
+  
+  if (error instanceof Error) {
+    errorMessage = error.message;
+  } else if (typeof error === 'string') {
+    errorMessage = error;
+  } else {
+    try {
+      errorMessage = JSON.stringify(error, null, 2);
+    } catch {
+      errorMessage = String(error);
+    }
+  }
+  
+  // For server actions, we want to throw the error to be caught by Next.js
+  throw new Error(`Application Error: ${errorMessage}`);
 }

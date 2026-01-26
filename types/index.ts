@@ -104,19 +104,13 @@ export type CreateUserParams = {
   }
   
   // ====== ORDER PARAMS
-  export type CheckoutOrderParams = {
-    eventTitle: string
-    eventId: string
-    price: string
-    isFree: boolean
-    buyerId: string
-  }
-  
   export type CreateOrderParams = {
-    stripeId: string
+    whatsappNumber: string
     eventId: string
-    buyerId: string
-    totalAmount: string
+    buyerName: string
+    buyerNumber: string
+    buyerEmail: string
+    totalAmount: number
     createdAt: Date
   }
   

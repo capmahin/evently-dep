@@ -19,8 +19,8 @@ const Header = () => {
           <Image
             src="/assets/images/logo.svg"
             alt="Evently Logo"
-            width={128}
-            height={38}
+            width={52}
+            height={8}
             className="object-contain"
           />
         </Link>
@@ -142,7 +142,7 @@ const Header = () => {
                         afterSignOutUrl="/"
                         appearance={{
                           elements: {
-                            avatarBox: "w-8 h-8 border-2 border-white/50 shadow-sm"
+                            avatarBox: "w-12 h-12 border-2 border-white/50 shadow-sm"
                           }
                         }}
                       />

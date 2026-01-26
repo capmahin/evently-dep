@@ -43,9 +43,6 @@ This document explains and fixes common issues with deploying Next.js applicatio
   NEXT_PUBLIC_SERVER_URL = "https://your-site-name.netlify.app"
   UPLOADTHING_SECRET = "Your UploadThing secret"
   UPLOADTHING_APP_ID = "Your UploadThing app ID"
-  STRIPE_SECRET_KEY = "Your Stripe secret key"
-  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY = "Your Stripe publishable key"
-  STRIPE_WEBHOOK_SECRET = "Your Stripe webhook secret"
   WEBHOOK_SECRET = "Your webhook secret"
 ```
 
@@ -86,11 +83,6 @@ export default nextConfig;
 ### File Uploads (UploadThing)
 - `UPLOADTHING_SECRET`: Secret key for file uploads
 - `UPLOADTHING_APP_ID`: App ID for UploadThing
-
-### Payments (Stripe)
-- `STRIPE_SECRET_KEY`: Secret key for payment processing
-- `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`: Public key for frontend
-- `STRIPE_WEBHOOK_SECRET`: Secret for webhook validation
 
 ### Webhooks
 - `WEBHOOK_SECRET`: For webhook validation
@@ -133,8 +125,7 @@ After deployment, verify:
 3. **Authentication** works (sign in/sign up)
 4. **Database operations** work (create/update events)
 5. **File uploads** work (image uploads)
-6. **Payments** work (checkout process)
-7. **Webhooks** are accessible (for Stripe/Clerk)
+6. **Webhooks** are accessible (for Clerk)
 
 ## Troubleshooting
 
@@ -156,9 +147,7 @@ After deployment, verify:
 - Ensure database is accessible from the internet
 - Check database connection limits
 
-### Payment Processing Issues
-- Verify Stripe keys are correct
-- Ensure webhook URLs are updated for the deployed site
+
 
 ## Best Practices
 

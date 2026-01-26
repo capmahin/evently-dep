@@ -1,7 +1,6 @@
 "use server"
 
-import Stripe from 'stripe';
-import { CheckoutOrderParams, CreateOrderParams, GetOrdersByEventParams, GetOrdersByUserParams } from "@/types"
+import { CreateOrderParams, GetOrdersByEventParams, GetOrdersByUserParams } from "@/types"
 import { redirect } from 'next/navigation';
 import { handleError } from '../utils';
 import { connectToDatabase } from '../database';
@@ -10,51 +9,75 @@ import Event from '../database/models/event.model';
 import {ObjectId} from 'mongodb';
 import User from '../database/models/user.model';
 
-export const checkoutOrder = async (order: CheckoutOrderParams) => {
-  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
-
-  const price = order.isFree ? 0 : Number(order.price) * 100;
-
-  try {
-    const session = await stripe.checkout.sessions.create({
-      line_items: [
-        {
-          price_data: {
-            currency: 'usd',
-            unit_amount: price,
-            product_data: {
-              name: order.eventTitle
-            }
-          },
-          quantity: 1
-        },
-      ],
-      metadata: {
-        eventId: order.eventId,
-        buyerId: order.buyerId,
-      },
-      mode: 'payment',
-      success_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/profile`,
-      cancel_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/`,
-    });
-
-    redirect(session.url!)
-  } catch (error) {
-    throw error;
-  }
-}
-
 export const createOrder = async (order: CreateOrderParams) => {
   try {
     await connectToDatabase();
     
-    const newOrder = await Order.create({
-      ...order,
-      event: order.eventId,
-      buyer: order.buyerId,
+    // Log schema information for debugging
+    console.log('Order schema paths:', Object.keys(Order.schema.paths));
+    
+    // Log the incoming order data for debugging
+    console.log('Creating order with data:', {
+      whatsappNumber: order.whatsappNumber,
+      totalAmount: order.totalAmount,
+      eventId: order.eventId,
+      buyerName: order.buyerName,
+      buyerNumber: order.buyerNumber,
+      buyerEmail: order.buyerEmail,
+      createdAt: order.createdAt
     });
+    
+    // Check if event exists
+    const Event = (await import('@/lib/database/models/event.model')).default;
+    const eventExists = await Event.findById(order.eventId);
+    if (!eventExists) {
+      throw new Error('Event not found');
+    }
+    
+    // Create the order object explicitly to avoid any schema conflicts
+    const orderData = {
+      whatsappNumber: order.whatsappNumber,
+      totalAmount: order.totalAmount,
+      event: order.eventId,
+      buyer: {
+        name: order.buyerName,
+        number: order.buyerNumber,
+        email: order.buyerEmail
+      },
+      items: [], // Initialize with empty items array
+      status: 'pending',
+      createdAt: order.createdAt
+    };
+    
+    console.log('Final order data being sent to DB:', orderData);
+    
+    const newOrder = await Order.create(orderData);
 
+    console.log('Order created successfully:', newOrder._id);
     return JSON.parse(JSON.stringify(newOrder));
+  } catch (error) {
+    console.error('Error creating order:', error);
+    handleError(error);
+  }
+}
+
+export const updateOrder = async ({ orderId, updateData, path }: { orderId: string; updateData: Partial<Omit<CreateOrderParams, 'createdAt'>>; path: string }) => {
+  try {
+    await connectToDatabase();
+
+    const orderToUpdate = await Order.findById(orderId);
+    
+    if (!orderToUpdate) {
+      throw new Error('Order not found');
+    }
+
+    const updatedOrder = await Order.findByIdAndUpdate(
+      orderId,
+      { ...updateData },
+      { new: true }
+    );
+
+    return JSON.parse(JSON.stringify(updatedOrder));
   } catch (error) {
     handleError(error);
   }
@@ -113,6 +136,30 @@ export async function getOrdersByEvent({ searchString, eventId }: GetOrdersByEve
     return JSON.parse(JSON.stringify(orders))
   } catch (error) {
     handleError(error)
+  }
+}
+
+// GET ORDER BY ID
+export async function getOrderById(orderId: string) {
+  try {
+    await connectToDatabase();
+    
+    const order = await Order.findById(orderId)
+      .populate({
+        path: 'event',
+        model: 'Event',
+        populate: {
+          path: 'organizer',
+          model: 'User',
+          select: '_id firstName lastName'
+        }
+      });
+
+    if (!order) throw new Error('Order not found');
+
+    return JSON.parse(JSON.stringify(order));
+  } catch (error) {
+    handleError(error);
   }
 }
 
