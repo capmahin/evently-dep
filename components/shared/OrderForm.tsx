@@ -30,6 +30,8 @@ type OrderFormProps = {
 
 const OrderForm = ({ userId, type, order, orderId, eventId }: OrderFormProps & { eventId?: string }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [createdOrderId, setCreatedOrderId] = useState<string | null>(null);
 
   // Map the order object to match the form schema
   const initialValues =
@@ -72,8 +74,13 @@ const OrderForm = ({ userId, type, order, orderId, eventId }: OrderFormProps & {
         });
 
         if (newOrder) {
+          setCreatedOrderId(newOrder._id);
+          setIsSuccess(true);
           form.reset();
-          router.push(`/orders/${newOrder._id}`);
+          // Redirect after showing success for 2 seconds
+          setTimeout(() => {
+            router.push(`/orders/${newOrder._id}`);
+          }, 2000);
         }
       } catch (error) {
         console.error('Error creating order:', error);
@@ -89,11 +96,28 @@ const OrderForm = ({ userId, type, order, orderId, eventId }: OrderFormProps & {
   }
 
   return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-5"
-      >
+    <div className="relative">
+      {isSuccess && (
+        <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-xl animate-fade-in">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
+              <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <div>
+              <h3 className="font-semibold text-green-800">Order Created Successfully!</h3>
+              <p className="text-green-700 text-sm">Redirecting to order details...</p>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex flex-col gap-5"
+        >
         <div className="flex flex-col gap-5 md:flex-row">
           <FormField
             control={form.control}
@@ -266,6 +290,7 @@ const OrderForm = ({ userId, type, order, orderId, eventId }: OrderFormProps & {
         </Button>
       </form>
     </Form>
+    </div>
   );
 };
 

@@ -1,4 +1,4 @@
-import { Document, Schema, model, models, Types } from "mongoose";
+import mongoose, { Document, Schema, model, models, Types } from "mongoose";
 
 export interface IOrderItem {
   _id: Types.ObjectId;
@@ -56,10 +56,35 @@ const OrderSchema = new Schema({
   }
 }, { timestamps: true });
 
+// Add indexes
+OrderSchema.index({ event: 1 });
+OrderSchema.index({ 'buyer.email': 1 });
+OrderSchema.index({ createdAt: -1 });
+
 // Clear existing model if it exists to force schema refresh
 if (models.Order) {
   delete models.Order;
 }
+
+// Drop existing stripeId index if it exists
+const dropStripeIdIndex = async () => {
+  try {
+    if (!mongoose.connection.db) return;
+    const collections = await mongoose.connection.db.listCollections({ name: 'orders' }).toArray();
+    if (collections.length > 0) {
+      const indexes = await mongoose.connection.collection('orders').indexes();
+      const stripeIdIndex = indexes.find((index: any) => index.name === 'stripeId_1');
+      if (stripeIdIndex) {
+        await mongoose.connection.collection('orders').dropIndex('stripeId_1');
+        console.log('Dropped existing stripeId_1 index');
+      }
+    }
+  } catch (error) {
+    console.log('Index drop check completed');
+  }
+};
+
+dropStripeIdIndex();
 
 const Order = model('Order', OrderSchema);
 
