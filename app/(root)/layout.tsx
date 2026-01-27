@@ -8,6 +8,7 @@ export default function RootLayout({
   }>) {
     return (
       <div className=" flex h-screen w-screen flex-col">
+        {/* header */}
         <Header/>
         <main className="flex-1">{children}</main>
         <Footer/>
