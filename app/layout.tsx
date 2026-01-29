@@ -10,8 +10,8 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "T-shirt Menea",
-  description: "Part of the exclusive Tanjim Race Collection.",
+  title: "টম টম BD",
+  description: "অক্সেলরে একটি বড় অ্যাডভেrts করে নিন।",
   icons: {
     icon: "/assets/images/logo.svg"
   }

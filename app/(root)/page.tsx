@@ -24,6 +24,7 @@ export default async function Home({ searchParams }: SearchParamProps) {
       <section id="events" className="  flex flex-col  ">
         <div >
           <Hero/>
+           
            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div className="text-center mb-12">
               <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent mb-4">
@@ -32,7 +33,18 @@ export default async function Home({ searchParams }: SearchParamProps) {
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
                 Discover our handpicked collection of premium event packages tailored just for you
               </p>
+                {/* serach and catagory */}
+
+            {/* <div className="flex w-full flex-col gap-4  md:flex-row">
+          <Search />
+          <CategoryFilter />
+        </div>  */}
+
+        {/* serach and catagory */}
             </div>
+       
+     
+
             
             <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-100 p-6 transition-all duration-300 hover:shadow-2xl">
               <Collection
@@ -51,10 +63,7 @@ export default async function Home({ searchParams }: SearchParamProps) {
         
         
 
-        {/* <div className="flex w-full flex-col gap-5 md:flex-row">
-          <Search />
-          <CategoryFilter />
-        </div> */}
+       
 
        
         {/* this is Functionality */}

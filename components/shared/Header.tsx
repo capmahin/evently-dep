@@ -127,7 +127,7 @@ const Header = () => {
               {/* Menu Content */}
               <div className="p-6 space-y-6 pt-12">
                 {/* Navigation Items */}
-                <nav className="space-y-2">
+                <nav className="space-y-1">
                   <NavItems onItemClick={() => setMobileMenuOpen(false)} />
                 </nav>
                 
@@ -142,7 +142,7 @@ const Header = () => {
                         afterSignOutUrl="/"
                         appearance={{
                           elements: {
-                            avatarBox: "w-12 h-12 border-2 border-white/50 shadow-sm"
+                            avatarBox: "w-10 h-10 border-2 border-white/50 shadow-sm"
                           }
                         }}
                       />
