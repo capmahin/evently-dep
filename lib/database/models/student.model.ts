@@ -1,14 +1,14 @@
 import { Document, Schema, model, models } from "mongoose";
 
 export interface IEvent extends Document {
-  _id: string;
+  _id: any;
   title: string;
   description?: string;
   createdAt: Date;
   imageUrl: string;
   url?: string;
-  category: { _id: string; name: string };
-  organizer: { _id: string; firstName: string; lastName: string };
+  category: { _id: any; name: string };
+  organizer: { _id: any; firstName: string; lastName: string };
 }
 
 const StudentSchema = new Schema({
