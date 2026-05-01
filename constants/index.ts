@@ -4,27 +4,20 @@ export const headerLinks = [
     route: "/"
   },
   {
-    label: "About",
-    route: "/"
+    label: "Assignments",
+    route: "/assignments"
   },
   {
-    label: "Services",
-    route: "/"
+    label: "My Submissions",
+    route: "/profile"
   },
   {
-    label: "Project",
-    route: "/"
-  },
- 
-  {
-    label: "Create Packages",
+    label: "Post Assignment",
     route: "/events/create"
   },
-
-
   {
-    label: "Our-Packages",
-    route: "/profile"
+    label: "Teachers",
+    route: "/teachers"
   }
 ];
 
@@ -33,21 +26,21 @@ export const eventDefaultValues = {
   description: "",
   location: "",
   imageUrl: "",
-  startDateTime: new Date(),
-  endDateTime: new Date(),
+  startDateTime: new Date(), // Assignment start date
+  endDateTime: new Date(), // Submission deadline
   categoryId: "",
   price: "",
   isFree: false,
-  url: ""
+  url: "" // Reference/resource link
 };
 
 export const orderDefaultValues = {
   whatsappNumber: "",
   totalAmount: "",
   eventId: "",
-  buyerName: "",
-  buyerNumber: "",
-  buyerEmail: "",
-  status: "pending" as const,
-  createdAt: new Date().toISOString().split('T')[0],
+  buyerName: "", // Student name
+  buyerNumber: "", // Student ID / roll
+  buyerEmail: "", // Student email
+  status: "pending" as const, // pending | submitted | graded
+  createdAt: new Date().toISOString().split("T")[0]
 };
