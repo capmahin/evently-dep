@@ -1,48 +1,66 @@
-'use client'
+"use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
-import Image from "next/image";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import NavItems from "./NavItems";
-import { LogIn, Menu, X } from "lucide-react";
+import { LogIn, Menu, X, GraduationCap } from "lucide-react";
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="w-full border-b border-gray-100 shadow-sm bg-white/80 backdrop-blur-sm sticky top-0 z-50">
-      <div className="wrapper flex items-center justify-between py-4">
+    <header
+      className="w-full border-b border-indigo-100 shadow-sm sticky top-0 z-50"
+      style={{
+        background:
+          "linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)"
+      }}
+    >
+      <div className="wrapper flex items-center justify-between py-4 px-6">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-          <Image
-            src="/assets/images/logo.svg"
-            alt="Evently Logo"
-            width={52}
-            height={8}
-            className="object-contain"
-          />
+        <Link
+          href="/"
+          className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+        >
+          <div className="w-9 h-9 rounded-lg bg-yellow-300 flex items-center justify-center shadow-lg">
+            <GraduationCap className="w-5 h-5 text-black" />
+          </div>
+          <div className="flex flex-col leading-none">
+            <span className="text-yellow-300 font-black text-sm tracking-tight">
+              EduAssign
+            </span>
+            <span className="text-white/40 text-[10px] tracking-widest uppercase">
+              Portal
+            </span>
+          </div>
         </Link>
-        
+
         {/* Desktop Navigation */}
-        <nav className="md:flex-between hidden flex-1 mx-8">
+        <nav className="md:flex hidden flex-1 mx-8">
           <NavItems />
         </nav>
-        
-        <div className="flex items-center justify-end gap-6 flex-shrink-0">
+
+        <div className="flex items-center justify-end gap-4 flex-shrink-0">
           <SignedIn>
-            <div className="hidden md:flex items-center gap-4">
+            <div className="hidden md:flex items-center gap-3">
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/10">
+                <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+                <span className="text-white/70 text-xs font-medium">
+                  Student
+                </span>
+              </div>
               <UserButton afterSignOutUrl="/" />
             </div>
           </SignedIn>
-          
+
           <SignedOut>
-            <div className="hidden md:flex items-center gap-4">
+            <div className="hidden md:flex items-center gap-3">
               <Button
                 asChild
                 size="lg"
-                className="rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200 group px-6 py-2.5"
+                className="rounded-full bg-yellow-300 hover:bg-yellow-400 text-black font-bold shadow-lg hover:shadow-yellow-300/30 hover:scale-105 transition-all duration-200 group px-6 py-2.5 border-0"
               >
                 <Link href="/sign-in" className="flex items-center gap-2">
                   <LogIn className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
@@ -55,23 +73,23 @@ const Header = () => {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden relative p-2 rounded-lg hover:bg-gray-50/50 transition-all duration-200 group"
+            className="md:hidden relative p-2 rounded-lg hover:bg-white/10 transition-all duration-200"
             aria-label="Toggle menu"
           >
             <div className="relative w-6 h-6 flex items-center justify-center">
-              <Menu 
-                className={`absolute transition-all duration-300 ease-out ${
-                  mobileMenuOpen 
-                    ? 'opacity-0 rotate-90 scale-0' 
-                    : 'opacity-100 rotate-0 scale-100'
+              <Menu
+                className={`absolute text-white transition-all duration-300 ease-out ${
+                  mobileMenuOpen
+                    ? "opacity-0 rotate-90 scale-0"
+                    : "opacity-100 rotate-0 scale-100"
                 }`}
                 size={24}
               />
-              <X 
-                className={`absolute transition-all duration-300 ease-out ${
-                  mobileMenuOpen 
-                    ? 'opacity-100 rotate-0 scale-100' 
-                    : 'opacity-0 -rotate-90 scale-0'
+              <X
+                className={`absolute text-white transition-all duration-300 ease-out ${
+                  mobileMenuOpen
+                    ? "opacity-100 rotate-0 scale-100"
+                    : "opacity-0 -rotate-90 scale-0"
                 }`}
                 size={24}
               />
@@ -81,105 +99,112 @@ const Header = () => {
       </div>
 
       {/* Mobile Menu Overlay */}
-      <div 
+      <div
         className={`fixed inset-0 top-[73px] z-40 md:hidden transition-all duration-300 ${
-          mobileMenuOpen 
-            ? 'opacity-100 visible' 
-            : 'opacity-0 invisible pointer-events-none'
+          mobileMenuOpen
+            ? "opacity-100 visible"
+            : "opacity-0 invisible pointer-events-none"
         }`}
       >
-        {/* Backdrop */}
-        <div 
-          className={`absolute inset-0 bg-black/20 backdrop-blur-sm transition-opacity duration-300 ${
-            mobileMenuOpen ? 'opacity-100' : 'opacity-0'
+        <div
+          className={`absolute inset-0 backdrop-blur-sm transition-opacity duration-300 ${
+            mobileMenuOpen ? "opacity-100" : "opacity-0"
           }`}
+          style={{ backgroundColor: "rgba(15,12,41,0.85)" }}
           onClick={() => setMobileMenuOpen(false)}
         />
-        
-        {/* Glassmorphism Menu Panel */}
-        <div 
+
+        <div
           className={`absolute right-4 top-2 w-[calc(100%-2rem)] max-w-sm ml-auto transition-all duration-300 ease-out ${
-            mobileMenuOpen 
-              ? 'opacity-100 translate-y-0 scale-100' 
-              : 'opacity-0 -translate-y-4 scale-95'
+            mobileMenuOpen
+              ? "opacity-100 translate-y-0 scale-100"
+              : "opacity-0 -translate-y-4 scale-95"
           }`}
         >
           <div className="relative">
-            {/* Glassmorphism Container */}
-            <div className="bg-white/90 backdrop-blur-xl border border-white/30 rounded-2xl shadow-2xl overflow-hidden">
-              {/* Glossy Top Border */}
-              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-200/50 to-transparent" />
-              
-              {/* Close Button */}
-              <div className="absolute top-4 right-4 z-10">
+            <div
+              className="rounded-2xl shadow-2xl overflow-hidden border border-yellow-300/20"
+              style={{
+                background:
+                  "linear-gradient(145deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)"
+              }}
+            >
+              {/* Top accent line */}
+              <div className="h-0.5 bg-gradient-to-r from-yellow-300/0 via-yellow-300 to-yellow-300/0" />
+
+              {/* Header inside mobile menu */}
+              <div className="px-5 pt-5 pb-3 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <GraduationCap className="w-5 h-5 text-yellow-300" />
+                  <span className="text-yellow-300 font-black text-sm tracking-tight">
+                    EduAssign Portal
+                  </span>
+                </div>
                 <button
                   onClick={() => setMobileMenuOpen(false)}
-                  className="p-2 rounded-lg hover:bg-gray-100/50 transition-all duration-200 group"
-                  aria-label="Close menu"
+                  className="p-1.5 rounded-lg hover:bg-white/10 transition-all duration-200"
                 >
-                  <X 
-                    className="h-5 w-5 text-gray-600 group-hover:text-gray-800 transition-colors"
+                  <X
+                    className="h-5 w-5 text-white/60 hover:text-white"
                     size={20}
                   />
                 </button>
               </div>
-              
-              {/* Menu Content */}
-              <div className="p-6 space-y-6 pt-12">
-                {/* Navigation Items */}
+
+              <div className="px-5 pb-6 space-y-5">
+                {/* Nav */}
                 <nav className="space-y-1">
                   <NavItems onItemClick={() => setMobileMenuOpen(false)} />
                 </nav>
-                
-                <div className="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
-                
-                {/* Authentication Section */}
-                <div className="space-y-4">
+
+                <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+
+                {/* Auth Section */}
+                <div className="space-y-3">
                   <SignedIn>
-                    <div className="flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-blue-50/50 to-indigo-50/50 border border-blue-100/50">
-                      <span className="text-sm font-medium text-gray-700">Account</span>
-                      <UserButton 
+                    <div className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/10">
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+                        <span className="text-sm font-medium text-white/70">
+                          Logged in
+                        </span>
+                      </div>
+                      <UserButton
                         afterSignOutUrl="/"
                         appearance={{
                           elements: {
-                            avatarBox: "w-10 h-10 border-2 border-white/50 shadow-sm"
+                            avatarBox: "w-9 h-9 border-2 border-yellow-300/30"
                           }
                         }}
                       />
                     </div>
                   </SignedIn>
-                  
+
                   <SignedOut>
-                    <div className="space-y-3">
-                      <Button
-                        asChild
-                        size="lg"
-                        className="w-full rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-lg hover:shadow-xl transition-all duration-200 group"
+                    <Button
+                      asChild
+                      size="lg"
+                      className="w-full rounded-xl bg-yellow-300 hover:bg-yellow-400 text-black font-bold shadow-lg transition-all duration-200 group border-0"
+                    >
+                      <Link
+                        href="/sign-in"
+                        className="flex items-center justify-center gap-2"
+                        onClick={() => setMobileMenuOpen(false)}
                       >
-                        <Link 
-                          href="/sign-in" 
-                          className="flex items-center justify-center gap-2"
-                          onClick={() => setMobileMenuOpen(false)}
-                        >
-                          <LogIn className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
-                          <span className="whitespace-nowrap">Get Started</span>
-                        </Link>
-                      </Button>
-                      
-                      <p className="text-xs text-center text-gray-500 px-4">
-                        Join thousands of users managing their events with Evently
-                      </p>
-                    </div>
+                        <LogIn className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
+                        <span>Get Started</span>
+                      </Link>
+                    </Button>
+                    <p className="text-xs text-center text-white/30 pt-1">
+                      Submit & track your assignments easily
+                    </p>
                   </SignedOut>
                 </div>
               </div>
-              
-              {/* Bottom Glossy Effect */}
-              <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-400/20 via-transparent to-indigo-400/20" />
+
+              {/* Bottom accent */}
+              <div className="h-0.5 bg-gradient-to-r from-yellow-300/0 via-yellow-300/30 to-yellow-300/0" />
             </div>
-            
-            {/* Reflection Effect */}
-            <div className="absolute -inset-1 bg-gradient-to-r from-blue-400/5 to-indigo-400/5 blur-xl -z-10 rounded-2xl" />
           </div>
         </div>
       </div>

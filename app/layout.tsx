@@ -10,10 +10,11 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "টম টম BD",
-  description: "অক্সেলরে একটি বড় অ্যাডভেrts করে নিন।",
+  title: "Assignment Management System for Students | EduAssign Portal",
+  description:
+    "EduAssign Portal is a comprehensive assignment management system designed for students. It offers a user-friendly interface to track, organize, and submit assignments efficiently. With features like deadline reminders, progress tracking, and collaboration tools, EduAssign helps students stay on top of their academic responsibilities and achieve success in their studies.",
   icons: {
-    icon: "/assets/images/logo.svg"
+    icon: "/favicon.ico"
   }
 };
 
