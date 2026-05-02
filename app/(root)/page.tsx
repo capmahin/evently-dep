@@ -1,3 +1,5 @@
+import { auth, currentUser } from "@clerk/nextjs";
+import { redirect } from "next/navigation";
 import CategoryFilter from "@/components/shared/CategoryFilter";
 import Collection from "@/components/shared/Collection";
 import Hero from "@/components/shared/Hero";
@@ -6,6 +8,17 @@ import { getAllEvents } from "@/lib/actions/event.actions";
 import { SearchParamProps } from "@/types";
 
 export default async function Home({ searchParams }: SearchParamProps) {
+  const { userId } = auth();
+
+  if (userId) {
+    const user = await currentUser();
+    const role = user?.unsafeMetadata?.role;
+
+    if (!role) {
+      redirect("/role-select");
+    }
+  }
+
   const page = Number(searchParams?.page) || 1;
   const searchText = (searchParams?.query as string) || "";
   const category = (searchParams?.category as string) || "";
@@ -27,10 +40,8 @@ export default async function Home({ searchParams }: SearchParamProps) {
             "linear-gradient(180deg, #0f0c29 0%, #1a1a2e 40%, #0f0c29 100%)"
         }}
       >
-        {/* Hero */}
         <Hero />
 
-        {/* Stats Bar */}
         <div
           className="w-full border-y border-yellow-300/10"
           style={{ background: "rgba(253,224,71,0.03)" }}
@@ -57,9 +68,7 @@ export default async function Home({ searchParams }: SearchParamProps) {
           </div>
         </div>
 
-        {/* Main Content */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 w-full">
-          {/* Section Header */}
           <div className="text-center mb-10">
             <p className="text-yellow-300 text-xs tracking-[0.4em] uppercase font-bold mb-3">
               📖 Student &amp; Teacher Portal
@@ -73,7 +82,6 @@ export default async function Home({ searchParams }: SearchParamProps) {
             </p>
           </div>
 
-          {/* How it works */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
             {[
               {
@@ -128,7 +136,6 @@ export default async function Home({ searchParams }: SearchParamProps) {
             ))}
           </div>
 
-          {/* Search & Filter */}
           <div
             className="rounded-2xl p-5 mb-8 border border-yellow-300/10"
             style={{ background: "rgba(255,255,255,0.03)" }}
@@ -142,7 +149,6 @@ export default async function Home({ searchParams }: SearchParamProps) {
             </div>
           </div>
 
-          {/* Collection */}
           <div
             className="rounded-2xl border border-yellow-300/10 p-6"
             style={{ background: "rgba(255,255,255,0.02)" }}
@@ -159,7 +165,6 @@ export default async function Home({ searchParams }: SearchParamProps) {
           </div>
         </div>
 
-        {/* Footer note */}
         <div className="text-center pb-10 mt-auto">
           <p className="text-white/20 text-xs tracking-widest">
             EduAssign Portal · Teachers & Students · {new Date().getFullYear()}

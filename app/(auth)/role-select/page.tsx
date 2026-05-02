@@ -8,7 +8,6 @@ export default function RoleSelectPage() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // যদি আগে থেকেই role থাকে তাহলে home এ পাঠাও
     if (isLoaded && user) {
       const role = user.unsafeMetadata?.role;
       if (role) {
@@ -25,6 +24,10 @@ export default function RoleSelectPage() {
         unsafeMetadata: { role }
       });
       await user?.reload();
+
+      // Clerk metadata sync এর জন্য wait
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       window.location.href = "/";
     } catch (err) {
       console.error(err);

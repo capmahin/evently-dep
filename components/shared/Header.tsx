@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { SignedIn, SignedOut, UserButton, useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import NavItems from "./NavItems";
@@ -9,6 +9,11 @@ import { LogIn, Menu, X, GraduationCap } from "lucide-react";
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { user } = useUser();
+
+  const role = user?.unsafeMetadata?.role as string | undefined;
+  const roleLabel = role === "teacher" ? "Teacher" : role === "student" ? "Student" : null;
+  const roleDotColor = role === "teacher" ? "bg-yellow-400" : "bg-green-400";
 
   return (
     <header
@@ -45,12 +50,14 @@ const Header = () => {
         <div className="flex items-center justify-end gap-4 flex-shrink-0">
           <SignedIn>
             <div className="hidden md:flex items-center gap-3">
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/10">
-                <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-                <span className="text-white/70 text-xs font-medium">
-                  Student
-                </span>
-              </div>
+              {roleLabel && (
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/10">
+                  <div className={`w-2 h-2 rounded-full animate-pulse ${roleDotColor}`} />
+                  <span className="text-white/70 text-xs font-medium">
+                    {roleLabel}
+                  </span>
+                </div>
+              )}
               <UserButton afterSignOutUrl="/" />
             </div>
           </SignedIn>
@@ -129,10 +136,8 @@ const Header = () => {
                   "linear-gradient(145deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)"
               }}
             >
-              {/* Top accent line */}
               <div className="h-0.5 bg-gradient-to-r from-yellow-300/0 via-yellow-300 to-yellow-300/0" />
 
-              {/* Header inside mobile menu */}
               <div className="px-5 pt-5 pb-3 flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <GraduationCap className="w-5 h-5 text-yellow-300" />
@@ -144,29 +149,24 @@ const Header = () => {
                   onClick={() => setMobileMenuOpen(false)}
                   className="p-1.5 rounded-lg hover:bg-white/10 transition-all duration-200"
                 >
-                  <X
-                    className="h-5 w-5 text-white/60 hover:text-white"
-                    size={20}
-                  />
+                  <X className="h-5 w-5 text-white/60 hover:text-white" size={20} />
                 </button>
               </div>
 
               <div className="px-5 pb-6 space-y-5">
-                {/* Nav */}
                 <nav className="space-y-1">
                   <NavItems onItemClick={() => setMobileMenuOpen(false)} />
                 </nav>
 
                 <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
-                {/* Auth Section */}
                 <div className="space-y-3">
                   <SignedIn>
                     <div className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/10">
                       <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+                        <div className={`w-2 h-2 rounded-full animate-pulse ${roleDotColor}`} />
                         <span className="text-sm font-medium text-white/70">
-                          Logged in
+                          {roleLabel ?? "Logged in"}
                         </span>
                       </div>
                       <UserButton
@@ -202,7 +202,6 @@ const Header = () => {
                 </div>
               </div>
 
-              {/* Bottom accent */}
               <div className="h-0.5 bg-gradient-to-r from-yellow-300/0 via-yellow-300/30 to-yellow-300/0" />
             </div>
           </div>
