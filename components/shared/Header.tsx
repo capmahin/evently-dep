@@ -1,210 +1,73 @@
 "use client";
 
-import { useState } from "react";
-import { SignedIn, SignedOut, UserButton, useUser } from "@clerk/nextjs";
 import Link from "next/link";
-import { Button } from "../ui/button";
-import NavItems from "./NavItems";
-import { LogIn, Menu, X, GraduationCap } from "lucide-react";
+import { GraduationCap } from "lucide-react";
+import { useEffect, useState } from "react";
 
 const Header = () => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { user } = useUser();
+  const [time, setTime] = useState("");
+  const [date, setDate] = useState("");
 
-  const role = user?.unsafeMetadata?.role as string | undefined;
-  const roleLabel = role === "teacher" ? "Teacher" : role === "student" ? "Student" : null;
-  const roleDotColor = role === "teacher" ? "bg-yellow-400" : "bg-green-400";
+  useEffect(() => {
+    const update = () => {
+      const now = new Date();
+      setTime(
+        now.toLocaleTimeString("en-US", {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          timeZone: "Asia/Dhaka",
+          hour12: true,
+        })
+      );
+      setDate(
+        now.toLocaleDateString("en-US", {
+          weekday: "short",
+          month: "short",
+          day: "numeric",
+          timeZone: "Asia/Dhaka",
+        })
+      );
+    };
+    update();
+    const interval = setInterval(update, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <header
-      className="w-full border-b border-indigo-100 shadow-sm sticky top-0 z-50"
+      className="w-full z-50 border-b border-white/8 flex-shrink-0"
       style={{
-        background:
-          "linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)"
+        background: "linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)"
       }}
     >
-      <div className="wrapper flex items-center justify-between py-4 px-6">
+      <div className="flex items-center justify-between px-5 py-3">
         {/* Logo */}
-        <Link
-          href="/"
-          className="flex items-center gap-2 hover:opacity-80 transition-opacity"
-        >
-          <div className="w-9 h-9 rounded-lg bg-yellow-300 flex items-center justify-center shadow-lg">
-            <GraduationCap className="w-5 h-5 text-black" />
+        <Link href="/" className="flex items-center gap-2.5 hover:opacity-85 transition-opacity">
+          <div className="w-8 h-8 rounded-lg bg-yellow-300 flex items-center justify-center shadow-md">
+            <GraduationCap className="w-4 h-4 text-black" />
           </div>
           <div className="flex flex-col leading-none">
-            <span className="text-yellow-300 font-black text-sm tracking-tight">
+            <span className="text-yellow-300 font-black text-[13px] tracking-tight">
               EduAssign
             </span>
-            <span className="text-white/40 text-[10px] tracking-widest uppercase">
+            <span className="text-white/30 text-[9px] tracking-[0.2em] uppercase">
               Portal
             </span>
           </div>
         </Link>
 
-        {/* Desktop Navigation */}
-        <nav className="md:flex hidden flex-1 mx-8">
-          <NavItems />
-        </nav>
-
-        <div className="flex items-center justify-end gap-4 flex-shrink-0">
-          <SignedIn>
-            <div className="hidden md:flex items-center gap-3">
-              {roleLabel && (
-                <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/10">
-                  <div className={`w-2 h-2 rounded-full animate-pulse ${roleDotColor}`} />
-                  <span className="text-white/70 text-xs font-medium">
-                    {roleLabel}
-                  </span>
-                </div>
-              )}
-              <UserButton afterSignOutUrl="/" />
-            </div>
-          </SignedIn>
-
-          <SignedOut>
-            <div className="hidden md:flex items-center gap-3">
-              <Button
-                asChild
-                size="lg"
-                className="rounded-full bg-yellow-300 hover:bg-yellow-400 text-black font-bold shadow-lg hover:shadow-yellow-300/30 hover:scale-105 transition-all duration-200 group px-6 py-2.5 border-0"
-              >
-                <Link href="/sign-in" className="flex items-center gap-2">
-                  <LogIn className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
-                  <span className="whitespace-nowrap">Get Started</span>
-                </Link>
-              </Button>
-            </div>
-          </SignedOut>
-
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden relative p-2 rounded-lg hover:bg-white/10 transition-all duration-200"
-            aria-label="Toggle menu"
-          >
-            <div className="relative w-6 h-6 flex items-center justify-center">
-              <Menu
-                className={`absolute text-white transition-all duration-300 ease-out ${
-                  mobileMenuOpen
-                    ? "opacity-0 rotate-90 scale-0"
-                    : "opacity-100 rotate-0 scale-100"
-                }`}
-                size={24}
-              />
-              <X
-                className={`absolute text-white transition-all duration-300 ease-out ${
-                  mobileMenuOpen
-                    ? "opacity-100 rotate-0 scale-100"
-                    : "opacity-0 -rotate-90 scale-0"
-                }`}
-                size={24}
-              />
-            </div>
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile Menu Overlay */}
-      <div
-        className={`fixed inset-0 top-[73px] z-40 md:hidden transition-all duration-300 ${
-          mobileMenuOpen
-            ? "opacity-100 visible"
-            : "opacity-0 invisible pointer-events-none"
-        }`}
-      >
-        <div
-          className={`absolute inset-0 backdrop-blur-sm transition-opacity duration-300 ${
-            mobileMenuOpen ? "opacity-100" : "opacity-0"
-          }`}
-          style={{ backgroundColor: "rgba(15,12,41,0.85)" }}
-          onClick={() => setMobileMenuOpen(false)}
-        />
-
-        <div
-          className={`absolute right-4 top-2 w-[calc(100%-2rem)] max-w-sm ml-auto transition-all duration-300 ease-out ${
-            mobileMenuOpen
-              ? "opacity-100 translate-y-0 scale-100"
-              : "opacity-0 -translate-y-4 scale-95"
-          }`}
-        >
-          <div className="relative">
-            <div
-              className="rounded-2xl shadow-2xl overflow-hidden border border-yellow-300/20"
-              style={{
-                background:
-                  "linear-gradient(145deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)"
-              }}
-            >
-              <div className="h-0.5 bg-gradient-to-r from-yellow-300/0 via-yellow-300 to-yellow-300/0" />
-
-              <div className="px-5 pt-5 pb-3 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <GraduationCap className="w-5 h-5 text-yellow-300" />
-                  <span className="text-yellow-300 font-black text-sm tracking-tight">
-                    EduAssign Portal
-                  </span>
-                </div>
-                <button
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="p-1.5 rounded-lg hover:bg-white/10 transition-all duration-200"
-                >
-                  <X className="h-5 w-5 text-white/60 hover:text-white" size={20} />
-                </button>
-              </div>
-
-              <div className="px-5 pb-6 space-y-5">
-                <nav className="space-y-1">
-                  <NavItems onItemClick={() => setMobileMenuOpen(false)} />
-                </nav>
-
-                <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-
-                <div className="space-y-3">
-                  <SignedIn>
-                    <div className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/10">
-                      <div className="flex items-center gap-2">
-                        <div className={`w-2 h-2 rounded-full animate-pulse ${roleDotColor}`} />
-                        <span className="text-sm font-medium text-white/70">
-                          {roleLabel ?? "Logged in"}
-                        </span>
-                      </div>
-                      <UserButton
-                        afterSignOutUrl="/"
-                        appearance={{
-                          elements: {
-                            avatarBox: "w-9 h-9 border-2 border-yellow-300/30"
-                          }
-                        }}
-                      />
-                    </div>
-                  </SignedIn>
-
-                  <SignedOut>
-                    <Button
-                      asChild
-                      size="lg"
-                      className="w-full rounded-xl bg-yellow-300 hover:bg-yellow-400 text-black font-bold shadow-lg transition-all duration-200 group border-0"
-                    >
-                      <Link
-                        href="/sign-in"
-                        className="flex items-center justify-center gap-2"
-                        onClick={() => setMobileMenuOpen(false)}
-                      >
-                        <LogIn className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
-                        <span>Get Started</span>
-                      </Link>
-                    </Button>
-                    <p className="text-xs text-center text-white/30 pt-1">
-                      Submit & track your assignments easily
-                    </p>
-                  </SignedOut>
-                </div>
-              </div>
-
-              <div className="h-0.5 bg-gradient-to-r from-yellow-300/0 via-yellow-300/30 to-yellow-300/0" />
-            </div>
+        {/* Timezone Clock */}
+        <div className="flex items-center gap-3 px-3 py-1.5 rounded-lg bg-white/5 border border-white/8">
+          <div className="flex flex-col items-end leading-none gap-0.5">
+            <span className="text-white/90 text-sm font-mono font-semibold tracking-wider">
+              {time}
+            </span>
+            <span className="text-white/35 text-[10px] tracking-wide">
+              {date} · BST
+            </span>
           </div>
+          <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse flex-shrink-0" />
         </div>
       </div>
     </header>

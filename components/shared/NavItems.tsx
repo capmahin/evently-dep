@@ -4,12 +4,27 @@ import { headerLinks } from "@/constants";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
+import {
+  Home, FileText, ClipboardList, PlusSquare,
+  BarChart2, Users, UserCheck, LucideIcon
+} from "lucide-react";
 
 interface NavItemsProps {
   onItemClick?: () => void;
+  collapsed?: boolean;
 }
 
-const NavItems = ({ onItemClick }: NavItemsProps) => {
+const routeIconMap: Record<string, LucideIcon> = {
+  "/":              Home,
+  "/assignments":   FileText,
+  "/profile":       ClipboardList,
+  "/events/create": PlusSquare,
+  "/marks":         BarChart2,
+  "/students":      Users,
+  "/teachers":      UserCheck,
+};
+
+const NavItems = ({ onItemClick, collapsed }: NavItemsProps) => {
   const pathname = usePathname();
   const { user } = useUser();
   const role = user?.unsafeMetadata?.role as string | undefined;
@@ -20,23 +35,41 @@ const NavItems = ({ onItemClick }: NavItemsProps) => {
   });
 
   return (
-    <ul className="md:flex-between flex w-full flex-col items-center gap-0.5 md:flex-row md:gap-1">
+    <ul className="flex flex-col gap-0.5 w-full">
       {filteredLinks.map((link) => {
         const isActive = pathname === link.route;
+        const Icon = routeIconMap[link.route];
 
         return (
-          <li
-            key={link.route}
-            className={`${
-              isActive ? "text-yellow-300 font-semibold" : "text-white/60"
-            } flex-center p-medium-16 whitespace-nowrap transition-all duration-300 hover:text-yellow-300 hover:font-medium rounded-md px-4 py-2`}
-          >
+          <li key={link.route}>
             <Link
               href={link.route}
-              className="block w-full text-center hover:scale-105 transition-transform duration-200"
               onClick={onItemClick}
+              title={collapsed ? link.label : undefined}
+              className={`flex items-center rounded-lg transition-all duration-200 group
+                ${collapsed ? "justify-center w-10 h-10 mx-auto" : "gap-3 px-3 py-2.5 w-full"}
+                ${isActive
+                  ? "bg-yellow-300/12 border border-yellow-300/20 text-yellow-300"
+                  : "border border-transparent text-white/50 hover:text-white/90 hover:bg-white/6"
+                }
+              `}
             >
-              {link.label}
+              {Icon && (
+                <Icon
+                  className={`flex-shrink-0 transition-colors duration-200 ${
+                    collapsed ? "w-4 h-4" : "w-[15px] h-[15px]"
+                  } ${
+                    isActive
+                      ? "text-yellow-300"
+                      : "text-white/35 group-hover:text-white/70"
+                  }`}
+                />
+              )}
+              {!collapsed && (
+                <span className="text-[13px] font-medium whitespace-nowrap leading-none">
+                  {link.label}
+                </span>
+              )}
             </Link>
           </li>
         );
