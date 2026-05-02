@@ -1,17 +1,12 @@
-import EventForm from "@/components/shared/EventForm";
+import OrderForm from "@/components/shared/OrderForm";
 import { auth } from "@clerk/nextjs";
-import {
-  GraduationCap,
-  Sparkles,
-  BookOpen,
-  Clock,
-  Link2,
-  Tag
-} from "lucide-react";
+import { GraduationCap, Sparkles, User, Hash, Mail, Phone } from "lucide-react";
+import { SearchParamProps } from "@/types";
 
-const CreateEvent = () => {
+const CreateOrder = ({ searchParams }: SearchParamProps) => {
   const { sessionClaims } = auth();
   const userId = sessionClaims?.userId as string;
+  const eventId = (searchParams?.eventId as string) || "";
 
   return (
     <div
@@ -21,7 +16,7 @@ const CreateEvent = () => {
           "linear-gradient(180deg, #0f0c29 0%, #1a1a2e 50%, #0f0c29 100%)"
       }}
     >
-      {/* Hero Section */}
+      {/* ── Hero Section ── */}
       <section
         className="relative overflow-hidden py-10 md:py-14"
         style={{
@@ -60,17 +55,16 @@ const CreateEvent = () => {
 
           {/* Badge */}
           <p className="text-yellow-300 text-xs tracking-[0.4em] uppercase font-bold mb-3">
-            👨‍🏫 Teacher Portal
+            🎓 Student Portal
           </p>
 
           {/* Title */}
           <h1 className="text-4xl md:text-5xl font-black tracking-tight text-white mb-3">
-            Post an <span className="text-yellow-300">Assignment</span>
+            Submit <span className="text-yellow-300">Assignment</span>
           </h1>
 
           <p className="text-white/50 text-base max-w-xl mx-auto leading-relaxed">
-            Create a new assignment for your students. Fill in the details below
-            and publish instantly.
+            Fill in your details and submit your assignment before the deadline.
             <Sparkles className="inline-block w-4 h-4 ml-2 text-yellow-300/60" />
           </p>
 
@@ -78,18 +72,21 @@ const CreateEvent = () => {
           <div className="flex flex-wrap justify-center gap-3 mt-6">
             {[
               {
-                icon: <BookOpen className="w-3.5 h-3.5" />,
-                text: "Add course details"
+                icon: <User className="w-3.5 h-3.5" />,
+                text: "Your student info"
               },
               {
-                icon: <Clock className="w-3.5 h-3.5" />,
-                text: "Set submission deadline"
+                icon: <Hash className="w-3.5 h-3.5" />,
+                text: "Student ID required"
               },
               {
-                icon: <Link2 className="w-3.5 h-3.5" />,
-                text: "Attach resources"
+                icon: <Mail className="w-3.5 h-3.5" />,
+                text: "Valid email needed"
               },
-              { icon: <Tag className="w-3.5 h-3.5" />, text: "Tag by category" }
+              {
+                icon: <Phone className="w-3.5 h-3.5" />,
+                text: "WhatsApp for updates"
+              }
             ].map((pill) => (
               <div
                 key={pill.text}
@@ -107,7 +104,7 @@ const CreateEvent = () => {
         </div>
       </section>
 
-      {/* Form Section */}
+      {/* ── Form Section ── */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10">
         {/* Form Card */}
         <div
@@ -122,41 +119,41 @@ const CreateEvent = () => {
             style={{ background: "rgba(255,255,255,0.02)" }}
           >
             <div
-              className="w-9 h-9 rounded-xl flex items-center justify-center"
+              className="w-9 h-9 rounded-xl flex items-center justify-center text-lg"
               style={{
                 background: "rgba(253,224,71,0.12)",
                 border: "1px solid rgba(253,224,71,0.2)"
               }}
             >
-              <BookOpen className="w-4 h-4 text-yellow-300" />
+              📋
             </div>
             <div>
               <h2 className="text-white font-black text-base tracking-tight">
-                Assignment Details
+                Submission Form
               </h2>
               <p className="text-white/30 text-xs">
-                Fill in all required fields to publish the assignment
+                Fill in all required fields to submit your assignment
               </p>
             </div>
 
-            {/* Teacher badge */}
+            {/* Student badge */}
             <div
               className="ml-auto flex items-center gap-2 px-3 py-1.5 rounded-full"
               style={{
-                background: "rgba(99,102,241,0.12)",
-                border: "1px solid rgba(99,102,241,0.25)"
+                background: "rgba(34,197,94,0.10)",
+                border: "1px solid rgba(34,197,94,0.25)"
               }}
             >
-              <div className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse" />
-              <span className="text-indigo-300 text-xs font-semibold">
-                Teacher
+              <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+              <span className="text-green-300 text-xs font-semibold">
+                Student
               </span>
             </div>
           </div>
 
           {/* Form Content */}
           <div className="p-6 md:p-8">
-            <EventForm userId={userId} type="Create" />
+            <OrderForm userId={userId} type="Create" eventId={eventId} />
           </div>
 
           {/* Card Footer */}
@@ -165,7 +162,7 @@ const CreateEvent = () => {
             style={{ background: "rgba(255,255,255,0.01)" }}
           >
             <p className="text-white/20 text-xs">
-              🎓 Students will be notified once the assignment is published
+              👨‍🏫 Your teacher will be notified once you submit
             </p>
           </div>
         </div>
@@ -179,27 +176,25 @@ const CreateEvent = () => {
             <div className="text-xl mt-0.5">💡</div>
             <div>
               <h3 className="text-yellow-300 font-black text-sm mb-3 tracking-wide">
-                Teacher Tips
+                Student Tips
               </h3>
               <ul className="space-y-2 text-sm text-white/40">
                 <li className="flex items-start gap-2">
                   <span className="text-yellow-300/40 mt-0.5">→</span>
-                  Write a clear title so students can identify the assignment
-                  easily
+                  Double-check your Student ID before submitting
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-yellow-300/40 mt-0.5">→</span>
-                  Set a realistic deadline — students need enough time to submit
+                  Use your institutional email address for proper identification
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-yellow-300/40 mt-0.5">→</span>
-                  Add a reference link or resource URL to help students get
-                  started
+                  Submit before the deadline — late submissions may not be
+                  accepted
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-yellow-300/40 mt-0.5">→</span>
-                  Choose the correct category so it appears under the right
-                  subject
+                  Add your WhatsApp number to receive grade notifications
                 </li>
               </ul>
             </div>
@@ -210,4 +205,4 @@ const CreateEvent = () => {
   );
 };
 
-export default CreateEvent;
+export default CreateOrder;

@@ -16,143 +16,230 @@ type CardProps = {
 const Card = ({ event, hasOrderLink, hidePrice }: CardProps) => {
   const { sessionClaims } = auth();
   const userId = sessionClaims?.userId as string;
-
   const isEventCreator = userId === event.organizer._id.toString();
 
+  // Deadline check
+  const now = new Date();
+  const deadline = new Date(event.endDateTime);
+  const isExpired = deadline < now;
+  const daysLeft = Math.ceil(
+    (deadline.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)
+  );
+
   return (
-    <div className="group relative flex min-h-[420px] w-full max-w-[380px] flex-col overflow-hidden rounded-xl bg-white shadow-lg transition-all hover:shadow-2xl hover:scale-[1.02] duration-300">
-      {/* Event Image */}
-      <div className="relative h-56 w-full overflow-hidden">
+    <div
+      className="group relative flex min-h-[420px] w-full max-w-[380px] flex-col overflow-hidden rounded-2xl border border-yellow-300/10 hover:border-yellow-300/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-yellow-300/5"
+      style={{
+        background: "linear-gradient(145deg, #1a1a2e 0%, #16213e 100%)"
+      }}
+    >
+      {/* ── Cover Image ── */}
+      <div className="relative h-48 w-full overflow-hidden">
         <Link href={`/events/${event._id.toString()}`}>
           <Image
             src={event.imageUrl}
             alt={event.title}
             fill
-            className="object-cover transition-transform duration-500 group-hover:scale-110"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+          {/* Gradient over image */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#1a1a2e] via-black/20 to-transparent" />
         </Link>
-        
-        {/* Event Creator Actions */}
+
+        {/* Teacher edit/delete actions */}
         {isEventCreator && !hidePrice && (
-          <div className="absolute right-3 top-3 flex gap-2 rounded-lg bg-white/90 backdrop-blur-sm p-2 shadow-md">
-            <Link 
+          <div
+            className="absolute right-3 top-3 flex gap-2 rounded-xl p-1.5 backdrop-blur-sm"
+            style={{
+              background: "rgba(26,26,46,0.85)",
+              border: "1px solid rgba(253,224,71,0.2)"
+            }}
+          >
+            <Link
               href={`/events/${event._id.toString()}/update`}
-              className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-50 hover:bg-blue-100 transition-colors"
-              title="Edit Event"
+              className="flex items-center justify-center w-7 h-7 rounded-lg hover:bg-yellow-300/10 transition-colors"
+              title="Edit Assignment"
             >
               <Image
                 src="/assets/icons/edit.svg"
                 alt="edit"
-                width={16}
-                height={16}
-                className="opacity-70"
+                width={14}
+                height={14}
+                className="opacity-60 hover:opacity-100"
               />
             </Link>
-
             <DeleteConfirmation eventId={event._id.toString()} />
           </div>
         )}
 
-        {/* Price Badge */}
+        {/* Marks / Free badge */}
         {!hidePrice && (
           <div className="absolute left-3 top-3">
-            <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold ${
-              event.isFree 
-                ? 'bg-emerald-100 text-emerald-800' 
-                : 'bg-blue-100 text-blue-800'
-            }`}>
-              {event.isFree ? "ফ্রি" : `${event.price}টাকা
-              `}
+            <span
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-black"
+              style={{
+                background: event.isFree
+                  ? "rgba(34,197,94,0.15)"
+                  : "rgba(253,224,71,0.15)",
+                border: event.isFree
+                  ? "1px solid rgba(34,197,94,0.3)"
+                  : "1px solid rgba(253,224,71,0.3)",
+                color: event.isFree ? "#86efac" : "#fde047"
+              }}
+            >
+              {event.isFree ? "📋 No Marks" : `🎯 ${event.price} Marks`}
             </span>
           </div>
         )}
+
+        {/* Deadline badge */}
+        <div className="absolute right-3 bottom-3">
+          <span
+            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold"
+            style={{
+              background: isExpired
+                ? "rgba(239,68,68,0.15)"
+                : "rgba(99,102,241,0.15)",
+              border: isExpired
+                ? "1px solid rgba(239,68,68,0.3)"
+                : "1px solid rgba(99,102,241,0.3)",
+              color: isExpired ? "#fca5a5" : "#a5b4fc"
+            }}
+          >
+            {isExpired ? "⏰ Expired" : `⏳ ${daysLeft}d left`}
+          </span>
+        </div>
       </div>
 
-      {/* Event Content */}
+      {/* ── Content ── */}
       <div className="flex flex-col flex-grow p-5">
-        {/* Category and Date */}
-        <div className="flex flex-col gap-2 mb-3">
-          <div className="flex items-center gap-2">
-            {event.category?.name && (
-              <span className="inline-block px-3 py-1 text-xs font-medium text-gray-600 bg-gray-100 rounded-full">
-                {event.category.name}
-              </span>
-            )}
-            <span className="text-xs text-gray-400">•</span>
-            <span className="text-sm text-gray-500">
-              {formatDateTime(event.startDateTime).dateOnly}
+        {/* Category + Date */}
+        <div className="flex items-center gap-2 mb-3 flex-wrap">
+          {event.category?.name && (
+            <span
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase"
+              style={{
+                background: "rgba(253,224,71,0.08)",
+                border: "1px solid rgba(253,224,71,0.15)",
+                color: "#fde047"
+              }}
+            >
+              🏷️ {event.category.name}
             </span>
-          </div>
-          <p className="text-sm text-gray-500 flex items-center gap-1">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            {formatDateTime(event.startDateTime).timeOnly}
-          </p>
+          )}
+          <span className="text-white/30 text-xs">
+            {formatDateTime(event.startDateTime).dateOnly}
+          </span>
         </div>
 
-        {/* Event Title */}
-        <Link href={`/events/${event._id.toString()}`} className="group/title mb-4">
-          <h3 className="text-xl font-bold text-gray-900 line-clamp-2 group-hover/title:text-blue-600 transition-colors">
+        {/* Title */}
+        <Link href={`/events/${event._id.toString()}`}>
+          <h3 className="text-white font-black text-lg leading-tight line-clamp-2 mb-2 hover:text-yellow-300 transition-colors duration-200">
             {event.title}
           </h3>
         </Link>
 
-        {/* Event Description (if available) */}
+        {/* Description */}
         {event.description && (
-          <p className="text-gray-600 text-sm line-clamp-2 mb-5">
+          <p className="text-white/40 text-sm line-clamp-2 mb-4 leading-relaxed">
             {event.description}
           </p>
         )}
 
-        <div className="mt-auto pt-4 border-t border-gray-100">
-          {/* Action Button */}
+        {/* Deadline row */}
+        <div
+          className="flex items-center gap-2 px-3 py-2 rounded-xl mb-4"
+          style={{
+            background: "rgba(255,255,255,0.03)",
+            border: "1px solid rgba(255,255,255,0.06)"
+          }}
+        >
+          <span className="text-sm">📅</span>
+          <div>
+            <p className="text-white/30 text-[10px] uppercase tracking-widest">
+              Deadline
+            </p>
+            <p className="text-white/70 text-xs font-semibold">
+              {formatDateTime(event.endDateTime).dateOnly} ·{" "}
+              {formatDateTime(event.endDateTime).timeOnly}
+            </p>
+          </div>
+        </div>
+
+        {/* ── Actions ── */}
+        <div className="mt-auto pt-4 border-t border-white/5">
           {hasOrderLink ? (
             <Link href={`/orders/create?eventId=${event._id.toString()}`}>
-              <Button 
-                className="mb-3 w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all hover:shadow-lg"
+              <Button
+                className="w-full mb-3 rounded-xl font-black text-black text-sm tracking-wide border-0 hover:scale-[1.02] transition-all duration-200 shadow-lg hover:shadow-yellow-300/20"
+                style={{ background: "#fde047" }}
               >
-                View Details
-                <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                </svg>
+                📋 Submit Assignment →
               </Button>
             </Link>
           ) : (
             <div className="flex gap-2 mb-3">
               <Link href={`/events/${event._id.toString()}`} className="flex-1">
-                <Button 
-                  variant="outline"
-                  className="w-full border-blue-200 text-blue-600 hover:bg-blue-50 px-4 py-2 rounded-lg text-sm font-medium transition-all"
+                <Button
+                  className="w-full rounded-xl text-sm font-bold border-0 transition-all duration-200 hover:scale-[1.02]"
+                  style={{
+                    background: "rgba(255,255,255,0.05)",
+                    border: "1px solid rgba(255,255,255,0.1)",
+                    color: "rgba(255,255,255,0.7)"
+                  }}
                 >
-                  More Details
+                  View Details
                 </Button>
               </Link>
-              <Link href={`/orders/create?eventId=${event._id.toString()}`} className="flex-1">
-                <Button 
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all"
+              <Link
+                href={`/orders/create?eventId=${event._id.toString()}`}
+                className="flex-1"
+              >
+                <Button
+                  className="w-full rounded-xl font-black text-black text-sm border-0 transition-all duration-200 hover:scale-[1.02] shadow-lg"
+                  style={{ background: "#fde047" }}
                 >
-                  Book Now!
+                  Submit →
                 </Button>
               </Link>
             </div>
           )}
-          
-          {/* Footer Section */}
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center">
-              <span className="text-white text-xs font-bold">
-                {event.organizer.firstName?.[0] || 'A'}
-              </span>
+
+          {/* Teacher info */}
+          <div className="flex items-center gap-3 mt-1">
+            <div
+              className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 font-black text-sm"
+              style={{
+                background: "rgba(99,102,241,0.2)",
+                border: "1px solid rgba(99,102,241,0.3)",
+                color: "#a5b4fc"
+              }}
+            >
+              {event.organizer.firstName?.[0] || "T"}
             </div>
-            <div className="flex-1">
-              <p className="text-sm font-medium text-gray-900 truncate">
+            <div className="flex-1 min-w-0">
+              <p className="text-white/70 text-sm font-semibold truncate">
                 {event.organizer.firstName} {event.organizer.lastName}
               </p>
-              <p className="text-xs text-gray-500">Organizer</p>
+              <p className="text-white/30 text-[10px] uppercase tracking-widest flex items-center gap-1">
+                <span>👨‍🏫</span> Teacher
+              </p>
             </div>
+
+            {/* Creator badge */}
+            {isEventCreator && (
+              <span
+                className="text-[10px] font-bold px-2 py-1 rounded-full shrink-0"
+                style={{
+                  background: "rgba(253,224,71,0.1)",
+                  border: "1px solid rgba(253,224,71,0.2)",
+                  color: "#fde047"
+                }}
+              >
+                You
+              </span>
+            )}
           </div>
         </div>
       </div>

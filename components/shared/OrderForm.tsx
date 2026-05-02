@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -28,29 +27,42 @@ type OrderFormProps = {
   orderId?: string;
 };
 
-const OrderForm = ({ userId, type, order, orderId, eventId }: OrderFormProps & { eventId?: string }) => {
+const fieldBox =
+  "flex items-center gap-3 h-[54px] w-full overflow-hidden rounded-xl px-4 py-2 border border-white/10 focus-within:border-yellow-300/40 transition-colors duration-200";
+const fieldStyle = { background: "rgba(255,255,255,0.05)" };
+const inputClass =
+  "border-0 bg-transparent outline-offset-0 focus:border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-white placeholder:text-white/30 text-sm p-0";
+const labelClass =
+  "text-yellow-300 text-[10px] tracking-widest uppercase font-bold mb-1.5 block";
+
+const OrderForm = ({
+  userId,
+  type,
+  order,
+  orderId,
+  eventId
+}: OrderFormProps & { eventId?: string }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [createdOrderId, setCreatedOrderId] = useState<string | null>(null);
 
-  // Map the order object to match the form schema
   const initialValues =
     order && type === "Update"
       ? {
           whatsappNumber: order.whatsappNumber,
-          totalAmount: order.totalAmount.toString(), // Convert number to string for form
-          eventId: order.event.toString(), // Convert ObjectId to string
+          totalAmount: order.totalAmount.toString(),
+          eventId: order.event.toString(),
           buyerName: order.buyer.name,
           buyerNumber: order.buyer.number,
           buyerEmail: order.buyer.email,
           status: order.status,
-          createdAt: new Date(order.createdAt).toISOString().split('T')[0], // Format date for input
+          createdAt: new Date(order.createdAt).toISOString().split("T")[0]
         }
       : {
           ...orderDefaultValues,
-          eventId: eventId || orderDefaultValues.eventId,
+          eventId: eventId || orderDefaultValues.eventId
         };
-  
+
   const router = useRouter();
 
   const form = useForm<z.infer<typeof orderFormSchema>>({
@@ -60,7 +72,6 @@ const OrderForm = ({ userId, type, order, orderId, eventId }: OrderFormProps & {
 
   async function onSubmit(values: z.infer<typeof orderFormSchema>) {
     setIsLoading(true);
-
     if (type === "Create") {
       try {
         const newOrder = await createOrder({
@@ -69,227 +80,333 @@ const OrderForm = ({ userId, type, order, orderId, eventId }: OrderFormProps & {
           buyerName: values.buyerName,
           buyerNumber: values.buyerNumber,
           buyerEmail: values.buyerEmail,
-          totalAmount: parseFloat(values.totalAmount) || 0, // Convert string to number
-          createdAt: new Date(values.createdAt),
+          totalAmount: parseFloat(values.totalAmount) || 0,
+          createdAt: new Date(values.createdAt)
         });
-
         if (newOrder) {
           setCreatedOrderId(newOrder._id);
           setIsSuccess(true);
           form.reset();
-          // Redirect after showing success for 2 seconds
           setTimeout(() => {
             router.push(`/orders/${newOrder._id}`);
           }, 2000);
         }
       } catch (error) {
-        console.error('Error creating order:', error);
-        // Show error message to user
-        alert('Failed to create order. Please check the console for details.');
+        console.error("Error creating order:", error);
+        alert("Failed to submit assignment. Please try again.");
       } finally {
         setIsLoading(false);
       }
     }
-    
-    // Note: Update functionality would need the updateOrder function to be properly implemented
-    // with the correct parameters
   }
 
   return (
     <div className="relative">
+      {/* ── Success Banner ── */}
       {isSuccess && (
-        <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-xl animate-fade-in">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
-              <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-            </div>
-            <div>
-              <h3 className="font-semibold text-green-800">Order Created Successfully!</h3>
-              <p className="text-green-700 text-sm">Redirecting to order details...</p>
-            </div>
+        <div
+          className="mb-6 p-4 rounded-xl border border-green-400/20 flex items-center gap-3"
+          style={{ background: "rgba(34,197,94,0.08)" }}
+        >
+          <div
+            className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 text-xl"
+            style={{
+              background: "rgba(34,197,94,0.15)",
+              border: "1px solid rgba(34,197,94,0.3)"
+            }}
+          >
+            ✅
+          </div>
+          <div>
+            <h3 className="font-black text-white text-sm">
+              Assignment Submitted!
+            </h3>
+            <p className="text-white/40 text-xs">
+              Redirecting to submission details...
+            </p>
           </div>
         </div>
       )}
-      
+
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-col gap-5"
+          className="flex flex-col gap-6"
         >
-        <div className="flex flex-col gap-5 md:flex-row">
-          <FormField
-            control={form.control}
-            name="whatsappNumber"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel>WhatsApp Number</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Enter WhatsApp Number"
-                    {...field}
-                    className="input-field"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          {/* ── Section 1: Student Info ── */}
+          <div>
+            <p className="text-yellow-300 text-[10px] tracking-widest uppercase font-bold mb-3 flex items-center gap-2">
+              🎓 Student Information
+            </p>
+            <div className="flex flex-col gap-4">
+              {/* Student Name */}
+              <FormField
+                control={form.control}
+                name="buyerName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className={labelClass}>Full Name</FormLabel>
+                    <FormControl>
+                      <div className={fieldBox} style={fieldStyle}>
+                        <span className="text-yellow-300/50 shrink-0">👤</span>
+                        <Input
+                          placeholder="Enter your full name"
+                          {...field}
+                          className={inputClass}
+                        />
+                      </div>
+                    </FormControl>
+                    <FormMessage className="text-red-400 text-xs pl-2" />
+                  </FormItem>
+                )}
+              />
 
-          <FormField
-            control={form.control}
-            name="totalAmount"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel>Total Amount</FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    placeholder="Enter total amount"
-                    {...field}
-                    className="input-field"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
+              {/* Student ID + Email side by side */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="buyerNumber"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className={labelClass}>
+                        Student ID / Roll
+                      </FormLabel>
+                      <FormControl>
+                        <div className={fieldBox} style={fieldStyle}>
+                          <span className="text-yellow-300/50 shrink-0">
+                            🪪
+                          </span>
+                          <Input
+                            placeholder="e.g. 2021-CS-001"
+                            {...field}
+                            className={inputClass}
+                          />
+                        </div>
+                      </FormControl>
+                      <FormMessage className="text-red-400 text-xs pl-2" />
+                    </FormItem>
+                  )}
+                />
 
-        <div className="flex flex-col gap-5 md:flex-row">
-          <FormField
-            control={form.control}
-            name="eventId"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel>Event ID</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Enter Event ID"
-                    {...field}
-                    className="input-field"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+                <FormField
+                  control={form.control}
+                  name="buyerEmail"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className={labelClass}>
+                        Email Address
+                      </FormLabel>
+                      <FormControl>
+                        <div className={fieldBox} style={fieldStyle}>
+                          <span className="text-yellow-300/50 shrink-0">
+                            📧
+                          </span>
+                          <Input
+                            type="email"
+                            placeholder="you@email.com"
+                            {...field}
+                            className={inputClass}
+                          />
+                        </div>
+                      </FormControl>
+                      <FormMessage className="text-red-400 text-xs pl-2" />
+                    </FormItem>
+                  )}
+                />
+              </div>
 
-          <div className="flex flex-col gap-5 w-full">
+              {/* WhatsApp */}
+              <FormField
+                control={form.control}
+                name="whatsappNumber"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className={labelClass}>
+                      WhatsApp Number
+                    </FormLabel>
+                    <FormControl>
+                      <div className={fieldBox} style={fieldStyle}>
+                        <span className="text-yellow-300/50 shrink-0">📱</span>
+                        <Input
+                          placeholder="+880 1XXX-XXXXXX"
+                          {...field}
+                          className={inputClass}
+                        />
+                      </div>
+                    </FormControl>
+                    <FormMessage className="text-red-400 text-xs pl-2" />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
+
+          {/* ── Section 2: Assignment Info ── */}
+          <div>
+            <p className="text-yellow-300 text-[10px] tracking-widest uppercase font-bold mb-3 flex items-center gap-2">
+              📋 Assignment Info
+            </p>
+            <div className="flex flex-col gap-4">
+              {/* Assignment ID (hidden but shown) */}
+              <FormField
+                control={form.control}
+                name="eventId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className={labelClass}>Assignment ID</FormLabel>
+                    <FormControl>
+                      <div className={fieldBox} style={fieldStyle}>
+                        <span className="text-yellow-300/50 shrink-0">🔗</span>
+                        <Input
+                          placeholder="Assignment ID"
+                          {...field}
+                          className={inputClass}
+                        />
+                      </div>
+                    </FormControl>
+                    <FormMessage className="text-red-400 text-xs pl-2" />
+                  </FormItem>
+                )}
+              />
+
+              {/* Marks + Date side by side */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="totalAmount"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className={labelClass}>
+                        Marks Obtained
+                      </FormLabel>
+                      <FormControl>
+                        <div className={fieldBox} style={fieldStyle}>
+                          <span className="text-yellow-300/50 shrink-0">
+                            🎯
+                          </span>
+                          <Input
+                            type="number"
+                            placeholder="e.g. 85"
+                            {...field}
+                            className={inputClass}
+                          />
+                        </div>
+                      </FormControl>
+                      <FormMessage className="text-red-400 text-xs pl-2" />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="createdAt"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className={labelClass}>
+                        Submission Date
+                      </FormLabel>
+                      <FormControl>
+                        <div className={fieldBox} style={fieldStyle}>
+                          <span className="text-yellow-300/50 shrink-0">
+                            📅
+                          </span>
+                          <Input
+                            type="date"
+                            {...field}
+                            className={`${inputClass} [color-scheme:dark]`}
+                          />
+                        </div>
+                      </FormControl>
+                      <FormMessage className="text-red-400 text-xs pl-2" />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* ── Section 3: Status (Teacher view) ── */}
+          <div>
+            <p className="text-yellow-300 text-[10px] tracking-widest uppercase font-bold mb-3 flex items-center gap-2">
+              👨‍🏫 Submission Status
+            </p>
             <FormField
               control={form.control}
-              name="buyerName"
+              name="status"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Buyer Name</FormLabel>
+                  <FormLabel className={labelClass}>Current Status</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="Enter Buyer Name"
-                      {...field}
-                      className="input-field"
-                    />
+                    <div className={fieldBox} style={fieldStyle}>
+                      <span className="text-yellow-300/50 shrink-0">📊</span>
+                      <select
+                        {...field}
+                        className="w-full bg-transparent text-white text-sm outline-none border-0 focus:ring-0"
+                        style={{ backgroundColor: "transparent" }}
+                      >
+                        <option value="" style={{ background: "#1a1a2e" }}>
+                          Select status
+                        </option>
+                        <option
+                          value="pending"
+                          style={{ background: "#1a1a2e" }}
+                        >
+                          ⏳ Pending Review
+                        </option>
+                        <option
+                          value="processing"
+                          style={{ background: "#1a1a2e" }}
+                        >
+                          🔍 Under Review
+                        </option>
+                        <option
+                          value="completed"
+                          style={{ background: "#1a1a2e" }}
+                        >
+                          ✅ Graded
+                        </option>
+                        <option
+                          value="cancelled"
+                          style={{ background: "#1a1a2e" }}
+                        >
+                          ❌ Rejected
+                        </option>
+                        <option
+                          value="refunded"
+                          style={{ background: "#1a1a2e" }}
+                        >
+                          ↩️ Returned
+                        </option>
+                      </select>
+                    </div>
                   </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            
-            <FormField
-              control={form.control}
-              name="buyerNumber"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Buyer Number</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Enter Buyer Number"
-                      {...field}
-                      className="input-field"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            
-            <FormField
-              control={form.control}
-              name="buyerEmail"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Buyer Email</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="email"
-                      placeholder="Enter Buyer Email"
-                      {...field}
-                      className="input-field"
-                    />
-                  </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-red-400 text-xs pl-2" />
                 </FormItem>
               )}
             />
           </div>
-        </div>
 
-        <div className="flex flex-col gap-5 md:flex-row">
-          <FormField
-            control={form.control}
-            name="status"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel>Status</FormLabel>
-                <FormControl>
-                  <select
-                    {...field}
-                    className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                  >
-                    <option value="">Select Status</option>
-                    <option value="pending">Pending</option>
-                    <option value="processing">Processing</option>
-                    <option value="completed">Completed</option>
-                    <option value="cancelled">Cancelled</option>
-                    <option value="refunded">Refunded</option>
-                  </select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="createdAt"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel>Created At</FormLabel>
-                <FormControl>
-                  <Input
-                    type="date"
-                    {...field}
-                    className="input-field"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-
-        <Button
-          type="submit"
-          size="lg"
-          disabled={form.formState.isSubmitting || isLoading}
-          className="button col-span-2 w-full bg-blue-600 hover:bg-blue-700"
-        >
-          {form.formState.isSubmitting || isLoading 
-            ? "Submitting..." 
-            : `${type} Order `}
-        </Button>
-      </form>
-    </Form>
+          {/* ── Submit ── */}
+          <Button
+            type="submit"
+            size="lg"
+            disabled={form.formState.isSubmitting || isLoading}
+            className="w-full rounded-xl font-black text-black text-sm tracking-widest uppercase py-4 border-0 transition-all duration-300 hover:scale-[1.01] shadow-lg hover:shadow-yellow-300/20"
+            style={{
+              background:
+                form.formState.isSubmitting || isLoading
+                  ? "rgba(253,224,71,0.5)"
+                  : "#fde047"
+            }}
+          >
+            {form.formState.isSubmitting || isLoading
+              ? "Submitting..."
+              : type === "Create"
+                ? "🚀 Submit Assignment"
+                : "✏️ Update Submission"}
+          </Button>
+        </form>
+      </Form>
     </div>
   );
 };
