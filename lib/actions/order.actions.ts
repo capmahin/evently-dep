@@ -237,3 +237,33 @@ export const checkoutOrder = async (order: {
     handleError(error);
   }
 };
+
+export async function getAllOrders() {
+  try {
+    await connectToDatabase();
+
+    const orders = await Order.find()
+      .populate("event", "title")
+      .sort({ createdAt: -1 });
+
+    return { data: JSON.parse(JSON.stringify(orders)) };
+  } catch (error) {
+    handleError(error);
+  }
+}
+
+// UPDATE ORDER MARK (Teacher দেয়)
+export async function updateOrderMark({
+  orderId,
+  mark,
+}: {
+  orderId: string;
+  mark: string;
+}) {
+  try {
+    await connectToDatabase();
+    await Order.findByIdAndUpdate(orderId, { totalAmount: mark });
+  } catch (error) {
+    handleError(error);
+  }
+}
