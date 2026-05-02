@@ -1,6 +1,5 @@
 import CheckoutButton from "@/components/shared/CheckoutButton";
 import Collection from "@/components/shared/Collection";
-import { Button } from "@/components/ui/button";
 import {
   getEventById,
   getRelatedEventsByCategory
@@ -21,95 +20,225 @@ const EventDetails = async ({
     eventId: event._id.toString(),
     page: searchParams.page as string
   });
+
+  const now = new Date();
+  const deadline = new Date(event.endDateTime);
+  const isExpired = deadline < now;
+  const daysLeft = Math.ceil(
+    (deadline.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)
+  );
+  const isUrgent = !isExpired && daysLeft <= 3;
+
   return (
-    <>
-      <section className="flex justify-center bg-primary-50 bg-dotted-pattern bg-contain">
-        <div className="grid grid-cols-1 2xl:max-w-7xl">
-          <Image
-            src={event.imageUrl}
-            alt="hero image"
-            width={1000}
-            height={1000}
-            className="h-full min-h-[300px] object-cover object-center"
-          />
+    <div
+      className="min-h-screen"
+      style={{
+        background:
+          "linear-gradient(180deg, #0f0c29 0%, #1a1a2e 50%, #0f0c29 100%)"
+      }}
+    >
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
 
-          <div className="flex w-full flex-col gap-8 p-5 md:p-10">
-            <div className="flex flex-col gap-6">
-              <h2 className="h2-bold">{event.title}</h2>
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-                <div className="flex gap-3">
-                  <p className="p-bold-20 rounded-full bg-green-500/10 px-5 py-2 text-green-700">
-                    {event.isFree ? "FREE" : `$${event.price}`}
-                  </p>
-                  <p className="p-medium-16 rounded-full bg-grey-500/10 px-4 py-2.5 text-grey-500">
-                    {event.category.name}
-                  </p>
-                </div>
+        {/* ── Top Section: Image + Basic Info ── */}
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 mb-8">
 
-                {/* <p className="p-medium-18 ml-2 mt-2 sm:mt-0">
-                by{' '}
-                <span className="text-primary-500">{event.organizer.firstName} {event.organizer.lastName}</span>
-              </p> */}
+          {/* Image — smaller, left */}
+          <div className="lg:col-span-2">
+            <div className="relative w-full rounded-2xl overflow-hidden"
+              style={{ aspectRatio: "4/3" }}>
+              <Image
+                src={event.imageUrl}
+                alt={event.title}
+                fill
+                className="object-cover"
+                priority
+              />
+              {/* Overlay */}
+              <div className="absolute inset-0"
+                style={{ background: "linear-gradient(to top, rgba(15,12,41,0.6) 0%, transparent 60%)" }} />
+
+              {/* Badges on image */}
+              <div className="absolute top-3 left-3 flex flex-col gap-1.5">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-black backdrop-blur-md"
+                  style={{
+                    background: event.isFree ? "rgba(34,197,94,0.25)" : "rgba(253,224,71,0.25)",
+                    border: event.isFree ? "1px solid rgba(34,197,94,0.5)" : "1px solid rgba(253,224,71,0.5)",
+                    color: event.isFree ? "#86efac" : "#fde047"
+                  }}>
+                  {event.isFree ? "📋 No Marks" : `🎯 ${event.price} Marks`}
+                </span>
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-black backdrop-blur-md"
+                  style={{ background: "rgba(253,224,71,0.15)", border: "1px solid rgba(253,224,71,0.3)", color: "#fde047" }}>
+                  🏷️ {event.category.name}
+                </span>
+              </div>
+
+              {/* Deadline badge */}
+              <div className="absolute top-3 right-3">
+                <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-black backdrop-blur-md ${isUrgent ? "animate-pulse" : ""}`}
+                  style={{
+                    background: isExpired ? "rgba(239,68,68,0.25)" : isUrgent ? "rgba(251,146,60,0.25)" : "rgba(99,102,241,0.25)",
+                    border: isExpired ? "1px solid rgba(239,68,68,0.5)" : isUrgent ? "1px solid rgba(251,146,60,0.5)" : "1px solid rgba(99,102,241,0.5)",
+                    color: isExpired ? "#fca5a5" : isUrgent ? "#fdba74" : "#a5b4fc"
+                  }}>
+                  {isExpired ? "⏰ Expired" : isUrgent ? `🔥 ${daysLeft}d left!` : `⏳ ${daysLeft}d left`}
+                </span>
               </div>
             </div>
-            <CheckoutButton event={event} />
 
-            <div className="flex flex-col gap-5">
-              <div className="flex gap-2 md:gap-3">
-                <Image
-                  src="/assets/icons/calendar.svg"
-                  alt="calendar"
-                  width={32}
-                  height={32}
-                />
-                <div className="p-medium-16 lg:p-regular-20 flex flex-wrap items-center">
-                  <p>
-                    {formatDateTime(event.startDateTime).dateOnly} -{" "}
-                    {formatDateTime(event.startDateTime).timeOnly}
-                  </p>
-                  <p>
-                    {formatDateTime(event.endDateTime).dateOnly} -{" "}
-                    {formatDateTime(event.endDateTime).timeOnly}
-                  </p>
-                </div>
+            {/* Mini info cards below image */}
+            <div className="grid grid-cols-2 gap-2 mt-3">
+              <div className="rounded-xl p-3"
+                style={{ background: "rgba(99,102,241,0.08)", border: "1px solid rgba(99,102,241,0.15)" }}>
+                <p className="text-white/30 text-[9px] uppercase tracking-widest mb-1">📅 Start</p>
+                <p className="text-white font-black text-xs">{formatDateTime(event.startDateTime).dateOnly}</p>
+                <p className="text-white/50 text-[10px]">{formatDateTime(event.startDateTime).timeOnly}</p>
               </div>
-
-              <div className="p-regular-20 flex items-center gap-3">
-                <Image
-                  src="/assets/icons/location.svg"
-                  alt="location"
-                  width={24}
-                  height={24}
-                />
-                <p className="p-medium-16 lg:p-regular-20">{event.location}</p>
+              <div className="rounded-xl p-3"
+                style={{
+                  background: isExpired ? "rgba(239,68,68,0.08)" : isUrgent ? "rgba(251,146,60,0.08)" : "rgba(253,224,71,0.06)",
+                  border: isExpired ? "1px solid rgba(239,68,68,0.2)" : isUrgent ? "1px solid rgba(251,146,60,0.2)" : "1px solid rgba(253,224,71,0.15)"
+                }}>
+                <p className="text-white/30 text-[9px] uppercase tracking-widest mb-1">⏰ Deadline</p>
+                <p className="font-black text-xs" style={{ color: isExpired ? "#fca5a5" : isUrgent ? "#fdba74" : "#fde047" }}>
+                  {formatDateTime(event.endDateTime).dateOnly}
+                </p>
+                <p className="text-white/50 text-[10px]">{formatDateTime(event.endDateTime).timeOnly}</p>
               </div>
             </div>
-            <div className="flex flex-col gap-2">
-              <p className="p-bold-20 text-grey-600">What You'll Learn:</p>
-              <p className="p-medium-16 lg:p-regular-18">{event.description}</p>
-              <p className="p-medium-16 lg:p-regular-18 truncate text-primary-500 underline">
-                {event.url}
+          </div>
+
+          {/* Right: Title + Details */}
+          <div className="lg:col-span-3 flex flex-col gap-5">
+
+            {/* Breadcrumb */}
+            <div className="flex items-center gap-2">
+              <Link href="/assignments" className="text-white/30 hover:text-yellow-300 text-xs transition-colors">
+                ← Assignments
+              </Link>
+              <span className="text-white/20 text-xs">/</span>
+              <span className="text-white/30 text-xs truncate">{event.title}</span>
+            </div>
+
+            {/* Title */}
+            <h1 className="text-3xl md:text-4xl font-black text-white leading-tight">
+              {event.title}
+            </h1>
+
+            {/* Tags row */}
+            <div className="flex flex-wrap gap-2">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black"
+                style={{ background: "rgba(253,224,71,0.1)", border: "1px solid rgba(253,224,71,0.2)", color: "#fde047" }}>
+                🏷️ {event.category.name}
+              </span>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black"
+                style={{
+                  background: event.isFree ? "rgba(34,197,94,0.1)" : "rgba(253,224,71,0.1)",
+                  border: event.isFree ? "1px solid rgba(34,197,94,0.25)" : "1px solid rgba(253,224,71,0.25)",
+                  color: event.isFree ? "#86efac" : "#fde047"
+                }}>
+                {event.isFree ? "📋 No Marks" : `🎯 ${event.price} Marks`}
+              </span>
+              <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black ${isUrgent ? "animate-pulse" : ""}`}
+                style={{
+                  background: isExpired ? "rgba(239,68,68,0.1)" : "rgba(99,102,241,0.1)",
+                  border: isExpired ? "1px solid rgba(239,68,68,0.25)" : "1px solid rgba(99,102,241,0.25)",
+                  color: isExpired ? "#fca5a5" : "#a5b4fc"
+                }}>
+                {isExpired ? "⏰ Expired" : `⏳ ${daysLeft} days left`}
+              </span>
+            </div>
+
+            {/* Teacher */}
+            <div className="flex items-center gap-3 p-4 rounded-2xl"
+              style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center font-black text-base shrink-0"
+                style={{ background: "linear-gradient(135deg, rgba(99,102,241,0.4), rgba(99,102,241,0.1))", border: "1px solid rgba(99,102,241,0.3)", color: "#a5b4fc" }}>
+                {event.organizer.firstName?.[0]?.toUpperCase() || "T"}
+              </div>
+              <div>
+                <p className="text-white font-black text-sm">
+                  {event.organizer.firstName} {event.organizer.lastName}
+                </p>
+                <p className="text-white/30 text-[10px] uppercase tracking-widest">👨‍🏫 Assignment Creator</p>
+              </div>
+            </div>
+
+            {/* Description */}
+            <div className="rounded-2xl p-5"
+              style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}>
+              <p className="text-yellow-300 text-[10px] tracking-[0.3em] uppercase font-black mb-3">
+                📖 About This Assignment
               </p>
+              <p className="text-white/70 leading-relaxed text-sm">
+                {event.description}
+              </p>
+              {event.url && (
+                <a href={event.url} target="_blank" rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 mt-4 text-sm font-bold transition-all hover:gap-3"
+                  style={{ color: "#a5b4fc" }}>
+                  🔗 Reference Link →
+                </a>
+              )}
+            </div>
 
-              
+            {/* Location */}
+            {event.location && (
+              <div className="flex items-center gap-3 rounded-xl p-3"
+                style={{ background: "rgba(34,197,94,0.06)", border: "1px solid rgba(34,197,94,0.15)" }}>
+                <span className="text-lg">📍</span>
+                <div>
+                  <p className="text-white/30 text-[9px] uppercase tracking-widest">Location / Class</p>
+                  <p className="text-white/80 font-semibold text-sm">{event.location}</p>
+                </div>
+              </div>
+            )}
+
+            {/* Submit Box */}
+            <div className="rounded-2xl p-5 mt-auto"
+              style={{
+                background: "linear-gradient(145deg, rgba(253,224,71,0.06), rgba(99,102,241,0.06))",
+                border: "1px solid rgba(253,224,71,0.12)"
+              }}>
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <p className="text-white/30 text-[10px] uppercase tracking-widest mb-1">Ready to submit?</p>
+                  <p className="text-white font-black text-base">{event.title}</p>
+                </div>
+                {isUrgent && !isExpired && (
+                  <span className="text-[10px] font-black px-2.5 py-1 rounded-full animate-pulse"
+                    style={{ background: "rgba(251,146,60,0.15)", color: "#fdba74", border: "1px solid rgba(251,146,60,0.3)" }}>
+                    ⚡ URGENT
+                  </span>
+                )}
+              </div>
+              <CheckoutButton event={event} />
+              <p className="text-white/20 text-[10px] text-center mt-3">
+                Submit before the deadline. Late submissions may not be accepted.
+              </p>
             </div>
           </div>
         </div>
-      </section>
-      {/* EVENTS with the same category */}
-      <section className="wrapper my-8 flex flex-col gap-8 md:gap-12">
-        <h2 className="h2-bold">Related Product</h2>
-        <Collection
-          data={relatedEvents?.data}
-          emptyTitle="No Packages Found"
-          emptyStateSubtext="Come back later"
-          collectionType="All_Events"
-          limit={3}
-          page={searchParams.page as string}
-          totalPages={relatedEvents?.totalPages}
-        />
-      </section>
-    </>
+
+        {/* ── Related Assignments ── */}
+        <div className="rounded-2xl border border-yellow-300/10 p-6"
+          style={{ background: "rgba(255,255,255,0.02)" }}>
+          <p className="text-yellow-300 text-xs tracking-[0.4em] uppercase font-black mb-1">📚 Same Category</p>
+          <h2 className="text-2xl font-black text-white mb-6">
+            Related <span className="text-yellow-300">Assignments</span>
+          </h2>
+          <Collection
+            data={relatedEvents?.data}
+            emptyTitle="No Related Assignments"
+            emptyStateSubtext="No other assignments in this category yet."
+            collectionType="All_Events"
+            limit={3}
+            page={searchParams.page as string}
+            totalPages={relatedEvents?.totalPages}
+          />
+        </div>
+      </div>
+    </div>
   );
 };
 
