@@ -18,73 +18,86 @@ const Card = ({ event, hasOrderLink, hidePrice }: CardProps) => {
   const userId = sessionClaims?.userId as string;
   const isEventCreator = userId === event.organizer._id.toString();
 
-  // Deadline check
   const now = new Date();
   const deadline = new Date(event.endDateTime);
   const isExpired = deadline < now;
   const daysLeft = Math.ceil(
     (deadline.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)
   );
+  const isUrgent = !isExpired && daysLeft <= 3;
 
   return (
     <div
-      className="group relative flex min-h-[420px] w-full max-w-[380px] flex-col overflow-hidden rounded-2xl border border-yellow-300/10 hover:border-yellow-300/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-yellow-300/5"
+      className="group relative flex min-h-[440px] w-full max-w-[380px] flex-col overflow-hidden rounded-3xl transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl"
       style={{
-        background: "linear-gradient(145deg, #1a1a2e 0%, #16213e 100%)"
+        background: "linear-gradient(160deg, #1e1b4b 0%, #1a1a2e 40%, #0f172a 100%)",
+        border: "1px solid rgba(255,255,255,0.06)",
+        boxShadow: "0 4px 24px rgba(0,0,0,0.4)"
       }}
     >
+      {/* Animated glow on hover */}
+      <div
+        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-3xl"
+        style={{
+          background: "radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(253,224,71,0.04), transparent 40%)",
+          border: "1px solid rgba(253,224,71,0.15)"
+        }}
+      />
+
       {/* ── Cover Image ── */}
-      <div className="relative h-48 w-full overflow-hidden">
+      <div className="relative h-52 w-full overflow-hidden rounded-t-3xl">
         <Link href={`/events/${event._id.toString()}`}>
           <Image
             src={event.imageUrl}
             alt={event.title}
             fill
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            className="object-cover transition-transform duration-700 group-hover:scale-110"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
-          {/* Gradient over image */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#1a1a2e] via-black/20 to-transparent" />
+          {/* Multi-layer gradient */}
+          <div className="absolute inset-0"
+            style={{
+              background: "linear-gradient(to top, #1a1a2e 0%, rgba(26,26,46,0.6) 40%, rgba(0,0,0,0.2) 100%)"
+            }}
+          />
+          {/* Shimmer effect */}
+          <div
+            className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
+            style={{
+              background: "linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.04) 50%, transparent 60%)",
+              backgroundSize: "200% 100%"
+            }}
+          />
         </Link>
 
-        {/* Teacher edit/delete actions */}
+        {/* Teacher actions */}
         {isEventCreator && !hidePrice && (
           <div
-            className="absolute right-3 top-3 flex gap-2 rounded-xl p-1.5 backdrop-blur-sm"
+            className="absolute right-3 top-3 flex gap-1.5 rounded-2xl p-1.5 backdrop-blur-md transition-all duration-300"
             style={{
-              background: "rgba(26,26,46,0.85)",
+              background: "rgba(15,12,41,0.8)",
               border: "1px solid rgba(253,224,71,0.2)"
             }}
           >
             <Link
               href={`/events/${event._id.toString()}/update`}
-              className="flex items-center justify-center w-7 h-7 rounded-lg hover:bg-yellow-300/10 transition-colors"
-              title="Edit Assignment"
+              className="flex items-center justify-center w-7 h-7 rounded-xl hover:bg-yellow-300/15 transition-all duration-200"
+              title="Edit"
             >
-              <Image
-                src="/assets/icons/edit.svg"
-                alt="edit"
-                width={14}
-                height={14}
-                className="opacity-60 hover:opacity-100"
-              />
+              <Image src="/assets/icons/edit.svg" alt="edit" width={13} height={13} className="opacity-60 hover:opacity-100" />
             </Link>
             <DeleteConfirmation eventId={event._id.toString()} />
           </div>
         )}
 
-        {/* Marks / Free badge */}
+        {/* Marks badge */}
         {!hidePrice && (
           <div className="absolute left-3 top-3">
             <span
-              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-black"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black backdrop-blur-sm"
               style={{
-                background: event.isFree
-                  ? "rgba(34,197,94,0.15)"
-                  : "rgba(253,224,71,0.15)",
-                border: event.isFree
-                  ? "1px solid rgba(34,197,94,0.3)"
-                  : "1px solid rgba(253,224,71,0.3)",
+                background: event.isFree ? "rgba(34,197,94,0.2)" : "rgba(253,224,71,0.2)",
+                border: event.isFree ? "1px solid rgba(34,197,94,0.4)" : "1px solid rgba(253,224,71,0.4)",
                 color: event.isFree ? "#86efac" : "#fde047"
               }}
             >
@@ -96,148 +109,173 @@ const Card = ({ event, hasOrderLink, hidePrice }: CardProps) => {
         {/* Deadline badge */}
         <div className="absolute right-3 bottom-3">
           <span
-            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold"
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold backdrop-blur-sm ${isUrgent ? "animate-pulse" : ""}`}
             style={{
               background: isExpired
-                ? "rgba(239,68,68,0.15)"
-                : "rgba(99,102,241,0.15)",
+                ? "rgba(239,68,68,0.2)"
+                : isUrgent
+                ? "rgba(251,146,60,0.2)"
+                : "rgba(99,102,241,0.2)",
               border: isExpired
-                ? "1px solid rgba(239,68,68,0.3)"
-                : "1px solid rgba(99,102,241,0.3)",
-              color: isExpired ? "#fca5a5" : "#a5b4fc"
+                ? "1px solid rgba(239,68,68,0.4)"
+                : isUrgent
+                ? "1px solid rgba(251,146,60,0.4)"
+                : "1px solid rgba(99,102,241,0.4)",
+              color: isExpired ? "#fca5a5" : isUrgent ? "#fdba74" : "#a5b4fc"
             }}
           >
-            {isExpired ? "⏰ Expired" : `⏳ ${daysLeft}d left`}
+            {isExpired ? "⏰ Expired" : isUrgent ? `🔥 ${daysLeft}d left!` : `⏳ ${daysLeft}d left`}
           </span>
         </div>
       </div>
 
       {/* ── Content ── */}
       <div className="flex flex-col flex-grow p-5">
-        {/* Category + Date */}
+
+        {/* Category + Date row */}
         <div className="flex items-center gap-2 mb-3 flex-wrap">
           {event.category?.name && (
             <span
-              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase"
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-black tracking-widest uppercase"
               style={{
                 background: "rgba(253,224,71,0.08)",
-                border: "1px solid rgba(253,224,71,0.15)",
+                border: "1px solid rgba(253,224,71,0.12)",
                 color: "#fde047"
               }}
             >
               🏷️ {event.category.name}
             </span>
           )}
-          <span className="text-white/30 text-xs">
+          <span className="text-white/25 text-[11px] ml-auto">
             {formatDateTime(event.startDateTime).dateOnly}
           </span>
         </div>
 
         {/* Title */}
         <Link href={`/events/${event._id.toString()}`}>
-          <h3 className="text-white font-black text-lg leading-tight line-clamp-2 mb-2 hover:text-yellow-300 transition-colors duration-200">
+          <h3 className="text-white font-black text-lg leading-snug line-clamp-2 mb-2 group-hover:text-yellow-300 transition-colors duration-300">
             {event.title}
           </h3>
         </Link>
 
         {/* Description */}
         {event.description && (
-          <p className="text-white/40 text-sm line-clamp-2 mb-4 leading-relaxed">
+          <p className="text-white/35 text-sm line-clamp-2 mb-4 leading-relaxed">
             {event.description}
           </p>
         )}
 
-        {/* Deadline row */}
+        {/* Deadline info box */}
         <div
-          className="flex items-center gap-2 px-3 py-2 rounded-xl mb-4"
+          className="flex items-center gap-3 px-3 py-2.5 rounded-2xl mb-4 transition-all duration-300 group-hover:border-white/10"
           style={{
-            background: "rgba(255,255,255,0.03)",
-            border: "1px solid rgba(255,255,255,0.06)"
+            background: "rgba(255,255,255,0.02)",
+            border: "1px solid rgba(255,255,255,0.05)"
           }}
         >
-          <span className="text-sm">📅</span>
+          <div
+            className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0"
+            style={{ background: "rgba(99,102,241,0.15)", border: "1px solid rgba(99,102,241,0.2)" }}
+          >
+            <span className="text-sm">📅</span>
+          </div>
           <div>
-            <p className="text-white/30 text-[10px] uppercase tracking-widest">
-              Deadline
-            </p>
-            <p className="text-white/70 text-xs font-semibold">
-              {formatDateTime(event.endDateTime).dateOnly} ·{" "}
-              {formatDateTime(event.endDateTime).timeOnly}
+            <p className="text-white/25 text-[10px] uppercase tracking-widest mb-0.5">Deadline</p>
+            <p className="text-white/70 text-xs font-bold">
+              {formatDateTime(event.endDateTime).dateOnly} · {formatDateTime(event.endDateTime).timeOnly}
             </p>
           </div>
+          {isUrgent && !isExpired && (
+            <span
+              className="ml-auto text-[10px] font-black px-2 py-1 rounded-full animate-pulse"
+              style={{ background: "rgba(251,146,60,0.15)", color: "#fdba74", border: "1px solid rgba(251,146,60,0.3)" }}
+            >
+              URGENT
+            </span>
+          )}
         </div>
 
-        {/* ── Actions ── */}
-        <div className="mt-auto pt-4 border-t border-white/5">
+        {/* Divider */}
+        <div className="h-px mb-4" style={{ background: "linear-gradient(to right, transparent, rgba(255,255,255,0.06), transparent)" }} />
+
+        {/* Actions */}
+        <div className="mt-auto">
           {hasOrderLink ? (
             <Link href={`/orders/create?eventId=${event._id.toString()}`}>
-              <Button
-                className="w-full mb-3 rounded-xl font-black text-black text-sm tracking-wide border-0 hover:scale-[1.02] transition-all duration-200 shadow-lg hover:shadow-yellow-300/20"
-                style={{ background: "#fde047" }}
+              <button
+                className="w-full mb-3 py-3 rounded-2xl font-black text-black text-sm tracking-wide transition-all duration-300 hover:scale-[1.02] hover:shadow-lg"
+                style={{
+                  background: "linear-gradient(135deg, #fde047 0%, #facc15 100%)",
+                  boxShadow: "0 4px 15px rgba(253,224,71,0.2)"
+                }}
               >
                 📋 Submit Assignment →
-              </Button>
+              </button>
             </Link>
           ) : (
             <div className="flex gap-2 mb-3">
               <Link href={`/events/${event._id.toString()}`} className="flex-1">
-                <Button
-                  className="w-full rounded-xl text-sm font-bold border-0 transition-all duration-200 hover:scale-[1.02]"
+                <button
+                  className="w-full py-2.5 rounded-2xl text-sm font-bold transition-all duration-200 hover:scale-[1.02]"
                   style={{
-                    background: "rgba(255,255,255,0.05)",
-                    border: "1px solid rgba(255,255,255,0.1)",
-                    color: "rgba(255,255,255,0.7)"
+                    background: "rgba(255,255,255,0.04)",
+                    border: "1px solid rgba(255,255,255,0.08)",
+                    color: "rgba(255,255,255,0.6)"
                   }}
                 >
-                  View Details
-                </Button>
+                  Details
+                </button>
               </Link>
-              <Link
-                href={`/orders/create?eventId=${event._id.toString()}`}
-                className="flex-1"
-              >
-                <Button
-                  className="w-full rounded-xl font-black text-black text-sm border-0 transition-all duration-200 hover:scale-[1.02] shadow-lg"
-                  style={{ background: "#fde047" }}
+              <Link href={`/orders/create?eventId=${event._id.toString()}`} className="flex-1">
+                <button
+                  className="w-full py-2.5 rounded-2xl font-black text-black text-sm transition-all duration-300 hover:scale-[1.02] hover:shadow-lg"
+                  style={{
+                    background: "linear-gradient(135deg, #fde047 0%, #facc15 100%)",
+                    boxShadow: "0 4px 15px rgba(253,224,71,0.15)"
+                  }}
                 >
                   Submit →
-                </Button>
+                </button>
               </Link>
             </div>
           )}
 
           {/* Teacher info */}
-          <div className="flex items-center gap-3 mt-1">
+          <div
+            className="flex items-center gap-3 px-3 py-2.5 rounded-2xl transition-all duration-300"
+            style={{
+              background: "rgba(255,255,255,0.02)",
+              border: "1px solid rgba(255,255,255,0.04)"
+            }}
+          >
             <div
               className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 font-black text-sm"
               style={{
-                background: "rgba(99,102,241,0.2)",
+                background: "linear-gradient(135deg, rgba(99,102,241,0.3), rgba(99,102,241,0.1))",
                 border: "1px solid rgba(99,102,241,0.3)",
                 color: "#a5b4fc"
               }}
             >
-              {event.organizer.firstName?.[0] || "T"}
+              {event.organizer.firstName?.[0]?.toUpperCase() || "T"}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-white/70 text-sm font-semibold truncate">
+              <p className="text-white/70 text-sm font-bold truncate">
                 {event.organizer.firstName} {event.organizer.lastName}
               </p>
-              <p className="text-white/30 text-[10px] uppercase tracking-widest flex items-center gap-1">
-                <span>👨‍🏫</span> Teacher
+              <p className="text-white/25 text-[10px] uppercase tracking-widest">
+                👨‍🏫 Teacher
               </p>
             </div>
-
-            {/* Creator badge */}
             {isEventCreator && (
               <span
-                className="text-[10px] font-bold px-2 py-1 rounded-full shrink-0"
+                className="text-[10px] font-black px-2.5 py-1 rounded-full shrink-0"
                 style={{
-                  background: "rgba(253,224,71,0.1)",
-                  border: "1px solid rgba(253,224,71,0.2)",
+                  background: "rgba(253,224,71,0.12)",
+                  border: "1px solid rgba(253,224,71,0.25)",
                   color: "#fde047"
                 }}
               >
-                You
+                ✦ You
               </span>
             )}
           </div>
